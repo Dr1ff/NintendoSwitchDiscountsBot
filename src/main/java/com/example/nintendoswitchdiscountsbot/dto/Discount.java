@@ -11,12 +11,12 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiscountDto implements Serializable {
+public class Discount implements Serializable {
     private Long id;
     private Long gameId;
     private BigDecimal priceWithDiscount;
 
-    public DiscountDto(DiscountEntity discountEntity) {
+    public Discount(DiscountEntity discountEntity) {
         this.id = discountEntity.getId();
         this.gameId = discountEntity.getGameId();
         this.priceWithDiscount = discountEntity.getPriceWithDiscount();

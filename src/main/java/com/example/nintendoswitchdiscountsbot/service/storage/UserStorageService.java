@@ -1,6 +1,6 @@
 package com.example.nintendoswitchdiscountsbot.service.storage;
 
-import com.example.nintendoswitchdiscountsbot.dto.UserDto;
+import com.example.nintendoswitchdiscountsbot.dto.User;
 import com.example.nintendoswitchdiscountsbot.entity.UserEntity;
 import com.example.nintendoswitchdiscountsbot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,15 +13,15 @@ import java.util.Optional;
 public class UserStorageService {
     private UserRepository repository;
 
-    public UserDto get(Long id) {
-        return new UserDto(find(id));
+    public User get(Long id) {
+        return new User(find(id));
     }
 
-    public void add(UserDto user) {
+    public void add(User user) {
         repository.save(new UserEntity(user));
     }
 
-    public void delete(UserDto user) {
+    public void delete(User user) {
         repository.delete(find(user.getId()));
     }
 

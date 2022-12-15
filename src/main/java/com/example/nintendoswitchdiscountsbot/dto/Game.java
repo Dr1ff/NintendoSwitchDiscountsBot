@@ -11,13 +11,13 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GameDto implements Serializable {
+public class Game implements Serializable {
     private Long id;
     private String name;
     private BigDecimal price;
     private String region;
 
-    public GameDto(GameEntity gameEntity) {
+    public Game(GameEntity gameEntity) {
         this.id = gameEntity.getId();
         this.name = gameEntity.getName();
         this.price = gameEntity.getPrice();

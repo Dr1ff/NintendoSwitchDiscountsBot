@@ -1,6 +1,6 @@
 package com.example.nintendoswitchdiscountsbot.entity;
 
-import com.example.nintendoswitchdiscountsbot.dto.GameDto;
+import com.example.nintendoswitchdiscountsbot.dto.Game;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,10 +32,10 @@ public class GameEntity {
     @Column(name = "region")
     private String region;
 
-    public GameEntity(GameDto gameDto) {
-        this.id = gameDto.getId();
-        this.name = gameDto.getName();
-        this.price = gameDto.getPrice();
-        this.region = gameDto.getRegion();
+    public GameEntity(Game game) {
+        this.id = game.getId();
+        this.name = game.getName();
+        this.price = game.getPrice();
+        this.region = game.getRegion();
     }
 }

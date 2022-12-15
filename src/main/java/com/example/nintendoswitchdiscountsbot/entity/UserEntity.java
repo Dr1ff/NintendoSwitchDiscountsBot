@@ -1,6 +1,6 @@
 package com.example.nintendoswitchdiscountsbot.entity;
 
-import com.example.nintendoswitchdiscountsbot.dto.UserDto;
+import com.example.nintendoswitchdiscountsbot.dto.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +26,7 @@ public class UserEntity {
     @Column(name = "region")
     private String region;
 
-    public UserEntity(UserDto user) {
+    public UserEntity(User user) {
         this.id = user.getId();
         this.wishlist = user.getWishlist();
         this.region = user.getRegion();
