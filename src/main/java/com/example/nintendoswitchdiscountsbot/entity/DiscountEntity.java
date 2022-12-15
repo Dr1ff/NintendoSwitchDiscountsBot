@@ -1,6 +1,6 @@
 package com.example.nintendoswitchdiscountsbot.entity;
 
-import com.example.nintendoswitchdiscountsbot.dto.DiscountDto;
+import com.example.nintendoswitchdiscountsbot.dto.Discount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,10 +28,10 @@ public class DiscountEntity {
     @Column(name = "price_with_discount")
     private BigDecimal priceWithDiscount;
 
-    public DiscountEntity(DiscountDto discountDto) {
-        this.id = discountDto.getId();
-        this.gameId = discountDto.getGameId();
-        this.priceWithDiscount = discountDto.getPriceWithDiscount();
+    public DiscountEntity(Discount discount) {
+        this.id = discount.getId();
+        this.gameId = discount.getGameId();
+        this.priceWithDiscount = discount.getPriceWithDiscount();
     }
 
     public DiscountEntity(Long gameId, BigDecimal priceWithDiscount) {

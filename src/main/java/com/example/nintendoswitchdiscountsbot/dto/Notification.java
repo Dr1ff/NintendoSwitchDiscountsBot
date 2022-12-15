@@ -11,14 +11,14 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NotificationDto implements Serializable {
+public class Notification implements Serializable {
     private Long id;
     private Long userId;
     private Long discountId;
     private Instant created;
     private Instant nextPushDate;
 
-    public NotificationDto(NotificationEntity notification) {
+    public Notification(NotificationEntity notification) {
         this.id = notification.getId();
         this.userId = notification.getUserId();
         this.discountId = notification.getDiscountId();

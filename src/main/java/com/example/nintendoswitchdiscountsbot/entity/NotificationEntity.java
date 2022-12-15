@@ -1,6 +1,6 @@
 package com.example.nintendoswitchdiscountsbot.entity;
 
-import com.example.nintendoswitchdiscountsbot.dto.NotificationDto;
+import com.example.nintendoswitchdiscountsbot.dto.Notification;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,7 +35,7 @@ public class NotificationEntity {
     @Column(name = "next_push_date")
     private Instant nextPushDate;
 
-    public NotificationEntity(NotificationDto notification) {
+    public NotificationEntity(Notification notification) {
         this.id = notification.getId();
         this.userId = notification.getUserId();
         this.discountId = notification.getDiscountId();
