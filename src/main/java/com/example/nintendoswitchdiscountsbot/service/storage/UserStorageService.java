@@ -11,26 +11,24 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserStorageService {
-    private UserRepository repository;
+    private final UserRepository repository;
 
-    public User get(Long id) {
-        return new User(find(id));
+    public Optional<User> get(Long id) {
+        var userEntityO = repository.findById(id);
+        if (userEntityO.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(new User(userEntityO.get().getId(),
+                    userEntityO.get().getWishlist(),
+                    userEntityO.get().getRegion()));
+        }
     }
 
     public void add(User user) {
-        repository.save(new UserEntity(user));
+        repository.save(new UserEntity(user.getId(), user.getWishlist(), user.getRegion()));
     }
 
     public void delete(User user) {
-        repository.delete(find(user.getId()));
-    }
-
-    private UserEntity find(Long id) {
-        Optional<UserEntity> notificationO = repository.findById(id);
-        if(notificationO.isPresent()) {
-            return notificationO.get();
-        } else {
-            throw new RuntimeException("User with this id not found");
-        }
+        repository.delete(new UserEntity(user.getId(), user.getWishlist(), user.getRegion()));
     }
 }

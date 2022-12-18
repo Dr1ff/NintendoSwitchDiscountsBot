@@ -2,13 +2,15 @@ package com.example.nintendoswitchdiscountsbot.service;
 
 
 import com.example.nintendoswitchdiscountsbot.config.BotConfig;
-import com.example.nintendoswitchdiscountsbot.parser.Parser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -16,7 +18,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig config;
-    private final Parser parser;
+    private final UpdateProcessor processor;
 
     @Override
     public String getBotUsername() {
@@ -30,7 +32,14 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        parser.parse();
+        Optional<SendMessage> messageO = processor.processing(update);
+        if (messageO.isPresent()) {
+            try {
+                execute(messageO.get());
+            } catch (TelegramApiException e) {
+                throw new RuntimeException("Хуйня какая то!");
+            }
+        }
     }
 }
 

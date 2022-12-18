@@ -3,16 +3,13 @@ package com.example.nintendoswitchdiscountsbot.dto;
 import com.example.nintendoswitchdiscountsbot.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class User implements Serializable {
-    private Long id;
-    // тут видимо нужен другой тип, тк будет много id(до 8 тысяч) может List<GameEntity>
+@RequiredArgsConstructor
+public class User {
+    private final Long id;
     private Long wishlist;
     private String region;
 
@@ -21,4 +18,6 @@ public class User implements Serializable {
         this.wishlist = user.getWishlist();
         this.region = user.getRegion();
     }
+
+
 }

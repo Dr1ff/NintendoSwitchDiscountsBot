@@ -19,12 +19,13 @@ public class UserEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
+
     @Column(name = "wishlist")
     private Long wishlist;
 
-    @Lob
     @Column(name = "region")
     private String region;
+
 
     public UserEntity(User user) {
         this.id = user.getId();
