@@ -21,14 +21,12 @@ public class GameEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Lob
     @Column(name = "name")
     private String name;
 
     @Column(name = "price")
     private BigDecimal price;
 
-    @Lob
     @Column(name = "region")
     private String region;
 

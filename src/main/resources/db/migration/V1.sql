@@ -8,26 +8,22 @@ create table discount (
 );
 
 create table game (
-    id bigint not null,
+    id bigint primary key,
     "name" varchar(255),
     price numeric(19, 2),
-    region varchar(255),
-    primary key (id)
+    region varchar(255)
 );
 
 create table notification (
-    id bigint not null,
+    id bigserial primary key,
     created timestamp,
     discount_id bigint,
     next_push_date timestamp,
-    user_id bigint,
-    primary key (id)
+    user_id bigint
 );
 
 create table "user" (
-    id int8 not null,
-    chat_id varchar(255),
+    id bigint primary key,
     region varchar(255),
-    wishlist bigint,
-    primary key (id)
+    wishlist bigint
 );

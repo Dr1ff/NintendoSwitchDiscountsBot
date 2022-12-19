@@ -1,12 +1,11 @@
 package com.example.nintendoswitchdiscountsbot.service.command;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public interface BotCommand {
+public interface CommandProcessor {
 
-    SendMessage send(Update update);
+    void process(Update update);
 
     Command getCommand();
 }

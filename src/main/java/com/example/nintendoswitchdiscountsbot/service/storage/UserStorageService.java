@@ -13,15 +13,17 @@ import java.util.Optional;
 public class UserStorageService {
     private final UserRepository repository;
 
-    public Optional<User> get(Long id) {
+    public Optional<User> findById(Long id) {
         var userEntityO = repository.findById(id);
         if (userEntityO.isEmpty()) {
             return Optional.empty();
         } else {
-            return Optional.of(new User(userEntityO.get().getId(),
-                    userEntityO.get().getWishlist(),
-                    userEntityO.get().getRegion()));
+            return Optional.of(fromEntity(userEntityO.get()));
         }
+    }
+
+    private User fromEntity(UserEntity entity) {
+        return new User(entity.getId(), entity.getWishlist(), entity.getRegion());
     }
 
     public void add(User user) {
