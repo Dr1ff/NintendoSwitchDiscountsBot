@@ -1,6 +1,6 @@
 package com.example.nintendoswitchdiscountsbot.service.storage;
 
-import com.example.nintendoswitchdiscountsbot.dto.User;
+import com.example.nintendoswitchdiscountsbot.buisness.User;
 import com.example.nintendoswitchdiscountsbot.entity.UserEntity;
 import com.example.nintendoswitchdiscountsbot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

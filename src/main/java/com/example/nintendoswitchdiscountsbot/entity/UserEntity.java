@@ -1,12 +1,14 @@
 package com.example.nintendoswitchdiscountsbot.entity;
 
-import com.example.nintendoswitchdiscountsbot.dto.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Getter
 @Setter
@@ -26,10 +28,4 @@ public class UserEntity {
     @Column(name = "region")
     private String region;
 
-
-    public UserEntity(User user) {
-        this.id = user.getId();
-        this.wishlist = user.getWishlist();
-        this.region = user.getRegion();
-    }
 }

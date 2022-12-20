@@ -1,6 +1,6 @@
 package com.example.nintendoswitchdiscountsbot.service.command.keyboard;
 
-import com.example.nintendoswitchdiscountsbot.dto.User;
+import com.example.nintendoswitchdiscountsbot.buisness.User;
 import com.example.nintendoswitchdiscountsbot.service.MessageEventPublisher;
 import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
 import lombok.RequiredArgsConstructor;
