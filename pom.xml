@@ -28,21 +28,19 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>4.7.2</version>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+            <version>5.1.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.github.igor-suhorukov/phantomjs-runner -->
         <dependency>
-            <groupId>com.github.igor-suhorukov</groupId>
-            <artifactId>phantomjs-runner</artifactId>
-            <version>1.1</version>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>9.10.1</version>
         </dependency>
-
         <dependency>
-            <groupId>com.github.detro.ghostdriver</groupId>
-            <artifactId>phantomjsdriver</artifactId>
-            <version>1.1.0</version>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-maven-plugin</artifactId>
+            <version>9.10.1</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -83,6 +81,11 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>9.10.1</version>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

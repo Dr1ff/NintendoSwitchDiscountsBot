@@ -1,6 +1,6 @@
 package com.example.nintendoswitchdiscountsbot.service.storage;
 
-import com.example.nintendoswitchdiscountsbot.dto.Game;
+import com.example.nintendoswitchdiscountsbot.business.Game;
 import com.example.nintendoswitchdiscountsbot.entity.GameEntity;
 import com.example.nintendoswitchdiscountsbot.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,23 +13,24 @@ import java.util.Optional;
 public class GameStorageService {
     private GameRepository repository;
 
-    public Game get(Long id) {
-        Optional<GameEntity> gameO = repository.findById(id);
-        if (gameO.isPresent()) {
-            return new Game(gameO.get());
+    public Optional<Game> findById(Long id) {
+        var gameEntityO = repository.findById(id);
+        if (gameEntityO.isEmpty()) {
+            return Optional.empty();
         } else {
-            throw new RuntimeException("Game with this id not found");
+            return Optional.of(fromEntity(gameEntityO.get()));
         }
+    }
+    private Game fromEntity(GameEntity entity) {
+        return new Game(entity.getId(), entity.getName(), entity.getPrice(), entity.getRegion());
     }
 
     public void add(Game game) {
-        repository.save(new GameEntity(game));
+        repository.save(new GameEntity(game.id(), game.name(), game.price(), game.region()));
     }
 
     public void delete(Game game) {
-        //не понимаю пока нужна ли проверка isPresent
-        GameEntity gameEntity = repository.findById(game.getId()).get();
-        repository.delete(gameEntity);
+        repository.delete(new GameEntity(game.id(), game.name(), game.price(), game.region()));
     }
 
 }
