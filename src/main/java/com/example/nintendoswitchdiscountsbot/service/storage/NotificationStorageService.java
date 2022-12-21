@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class NotificationStorageService {
-    private NotificationRepository repository;
+    private final NotificationRepository repository;
 
     public Optional<Notification> findById(Long id) {
         var notificationEntityO = repository.findById(id);

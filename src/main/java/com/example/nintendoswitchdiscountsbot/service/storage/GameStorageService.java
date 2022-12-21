@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class GameStorageService {
-    private GameRepository repository;
+    private final GameRepository repository;
 
     public Optional<Game> findById(Long id) {
         var gameEntityO = repository.findById(id);

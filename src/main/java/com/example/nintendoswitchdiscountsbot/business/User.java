@@ -10,6 +10,6 @@ import lombok.RequiredArgsConstructor;
 public class User {
     private final Long id;
     private Long wishlist;
-    private final String region;
+    private final String country;
 
 }

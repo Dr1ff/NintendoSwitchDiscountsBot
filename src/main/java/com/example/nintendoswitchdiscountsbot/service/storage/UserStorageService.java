@@ -23,14 +23,14 @@ public class UserStorageService {
     }
 
     private User fromEntity(UserEntity entity) {
-        return new User(entity.getId(), entity.getWishlist(), entity.getRegion());
+        return new User(entity.getId(), entity.getWishlist(), entity.getCountry());
     }
 
     public void add(User user) {
-        repository.save(new UserEntity(user.getId(), user.getWishlist(), user.getRegion()));
+        repository.save(new UserEntity(user.getId(), user.getWishlist(), user.getCountry()));
     }
 
     public void delete(User user) {
-        repository.delete(new UserEntity(user.getId(), user.getWishlist(), user.getRegion()));
+        repository.delete(new UserEntity(user.getId(), user.getWishlist(), user.getCountry()));
     }
 }
