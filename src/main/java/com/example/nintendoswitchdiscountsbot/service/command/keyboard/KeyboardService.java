@@ -1,6 +1,7 @@
 package com.example.nintendoswitchdiscountsbot.service.command.keyboard;
 
 import com.example.nintendoswitchdiscountsbot.enums.Country;
+import com.vdurmont.emoji.EmojiManager;
 import com.vdurmont.emoji.EmojiParser;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -10,6 +11,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 @Component
 public class KeyboardService {
@@ -136,7 +138,8 @@ public class KeyboardService {
                 .stream(Country.values())
                 .map(country -> {
                     InlineKeyboardButton button = new InlineKeyboardButton();
-                    button.setText(country.name());
+                    button.setText(EmojiParser.parseToUnicode(country.name())
+                            + EmojiManager.getForAlias(country.name().toLowerCase(Locale.ROOT)).getUnicode());
                     button.setCallbackData(country.name());
                     return button;
                 }).toList();

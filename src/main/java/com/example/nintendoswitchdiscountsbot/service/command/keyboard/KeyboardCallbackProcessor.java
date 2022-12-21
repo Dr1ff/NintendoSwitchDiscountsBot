@@ -1,14 +1,18 @@
 package com.example.nintendoswitchdiscountsbot.service.command.keyboard;
 
 import com.example.nintendoswitchdiscountsbot.business.User;
+import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.service.command.CallbackProcessor;
 import com.example.nintendoswitchdiscountsbot.service.observer.MessageEventPublisher;
 import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
+import com.vdurmont.emoji.EmojiManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+
+import java.util.Locale;
 
 @Component
 @RequiredArgsConstructor
@@ -33,13 +37,21 @@ public class KeyboardCallbackProcessor implements CallbackProcessor {
            replyMarkup.setReplyMarkup(keyboardService.getKeyboard(data));
            messageEventPublisher.publish(replyMarkup);
        } else if(data.contains("/")) {
-           userStorageService.add(new User(chatId, data.replace("/", "")));
+           data = data.replace("/", "");
+           userStorageService.add(new User(chatId, data));
            editMessageText.setText(String.format("Регион %s успешно установлен!" +
-                   "\nВы всегда можете изменить его в меню бота", data.replace("/", "")));
+                   "\nВы всегда можете изменить его в меню бота",
+                   data.replace("/", "")
+                           + EmojiManager.getForAlias(data
+                           .toLowerCase(Locale.ROOT)).getUnicode()
+                           + "цены будут указаны в "
+                           + Country.valueOf(data).getCurrency()
+                           + Country.valueOf(data).getSign()));
            messageEventPublisher.publish(editMessageText);
        } else {
            editMessageText.setReplyMarkup(keyboardService.getKeyboard(data));
-           editMessageText.setText(String.format("Выбранный регион: %s. \nПодтвердите ваш выбор.", data));
+           editMessageText.setText(String.format("Выбранный регион: %s. \nПодтвердите ваш выбор.", data
+                   + EmojiManager.getForAlias(data.toLowerCase(Locale.ROOT)).getUnicode()));
            messageEventPublisher.publish(editMessageText);
        }
 
