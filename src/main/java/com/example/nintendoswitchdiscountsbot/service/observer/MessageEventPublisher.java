@@ -1,4 +1,4 @@
-package com.example.nintendoswitchdiscountsbot.service;
+package com.example.nintendoswitchdiscountsbot.service.observer;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

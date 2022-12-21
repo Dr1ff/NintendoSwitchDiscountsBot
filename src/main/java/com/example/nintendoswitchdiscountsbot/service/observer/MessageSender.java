@@ -1,5 +1,6 @@
-package com.example.nintendoswitchdiscountsbot.service;
+package com.example.nintendoswitchdiscountsbot.service.observer;
 
+import com.example.nintendoswitchdiscountsbot.service.TelegramBot;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;

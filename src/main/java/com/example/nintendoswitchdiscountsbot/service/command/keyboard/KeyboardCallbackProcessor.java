@@ -1,26 +1,29 @@
 package com.example.nintendoswitchdiscountsbot.service.command.keyboard;
 
 import com.example.nintendoswitchdiscountsbot.business.User;
-import com.example.nintendoswitchdiscountsbot.service.MessageEventPublisher;
+import com.example.nintendoswitchdiscountsbot.service.command.CallbackProcessor;
+import com.example.nintendoswitchdiscountsbot.service.observer.MessageEventPublisher;
 import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 @Component
 @RequiredArgsConstructor
-public class KeyboardCallbackProcessor {
+public class KeyboardCallbackProcessor implements CallbackProcessor {
     private final KeyboardService keyboardService;
     private final UserStorageService userStorageService;
     private final MessageEventPublisher messageEventPublisher;
-    public void process(Update update) {
-       String data = update.getCallbackQuery().getData();
-       Long chatId = update.getCallbackQuery().getMessage().getChatId();
-       Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
+    public void process(CallbackQuery callbackQuery) {
+       String data = callbackQuery.getData();
+       Long chatId = callbackQuery.getMessage().getChatId();
+       Integer messageId = callbackQuery.getMessage().getMessageId();
+
        EditMessageReplyMarkup replyMarkup = new EditMessageReplyMarkup();
        EditMessageText editMessageText = new EditMessageText();
+
        editMessageText.setChatId(chatId);
        replyMarkup.setChatId(chatId);
        editMessageText.setMessageId(messageId);
