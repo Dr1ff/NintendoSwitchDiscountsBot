@@ -1,19 +1,14 @@
 package com.example.nintendoswitchdiscountsbot.entity;
 
+import com.example.nintendoswitchdiscountsbot.enums.Country;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Getter
-@Setter
-@Entity
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
 @Table(name = "\"user\"")
 public class UserEntity {
@@ -25,7 +20,7 @@ public class UserEntity {
     @Column(name = "wishlist")
     private Long wishlist;
 
-    @Column(name = "region")
-    private String region;
+    @Column(name = "country", nullable = false)
+    private Country country;
 
 }

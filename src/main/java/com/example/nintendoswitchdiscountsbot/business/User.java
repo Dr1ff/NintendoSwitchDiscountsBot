@@ -1,5 +1,6 @@
 package com.example.nintendoswitchdiscountsbot.business;
 
+import com.example.nintendoswitchdiscountsbot.enums.Country;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,6 @@ import lombok.RequiredArgsConstructor;
 public class User {
     private final Long id;
     private Long wishlist;
-    private final String region;
+    private final Country country;
 
 }
