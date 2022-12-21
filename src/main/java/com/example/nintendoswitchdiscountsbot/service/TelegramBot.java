@@ -2,9 +2,8 @@ package com.example.nintendoswitchdiscountsbot.service;
 
 
 import com.example.nintendoswitchdiscountsbot.config.BotConfig;
-import com.example.nintendoswitchdiscountsbot.service.command.handler.UpdateHandler;
+import com.example.nintendoswitchdiscountsbot.service.update.handler.UpdateHandler;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -29,7 +28,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     @Override
-    @SneakyThrows
     public void onUpdateReceived(Update update) {
         processor.processing(update);
     }
