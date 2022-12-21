@@ -39,13 +39,12 @@ public class KeyboardCallbackProcessor implements CallbackProcessor {
        } else if(data.contains("/")) {
            data = data.replace("/", "");
            userStorageService.add(new User(chatId, data));
-           editMessageText.setText(String.format("Регион %s успешно установлен!" +
+           editMessageText.setText(String.format("Регион %s успешно установлен!Цены будут указаны в %S" +
                    "\nВы всегда можете изменить его в меню бота",
                    data.replace("/", "")
                            + EmojiManager.getForAlias(data
-                           .toLowerCase(Locale.ROOT)).getUnicode()
-                           + "цены будут указаны в "
-                           + Country.valueOf(data).getCurrency()
+                           .toLowerCase(Locale.ROOT)).getUnicode(),
+                           Country.valueOf(data).getCurrency()
                            + Country.valueOf(data).getSign()));
            messageEventPublisher.publish(editMessageText);
        } else {
