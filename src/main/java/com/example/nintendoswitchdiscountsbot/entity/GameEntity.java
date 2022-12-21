@@ -1,18 +1,11 @@
 package com.example.nintendoswitchdiscountsbot.entity;
 
-import com.example.nintendoswitchdiscountsbot.dto.Game;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-@Entity
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
 @Table(name = "game")
 public class GameEntity {
@@ -21,21 +14,13 @@ public class GameEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Lob
     @Column(name = "name")
     private String name;
 
     @Column(name = "price")
     private BigDecimal price;
 
-    @Lob
     @Column(name = "region")
     private String region;
 
-    public GameEntity(Game game) {
-        this.id = game.getId();
-        this.name = game.getName();
-        this.price = game.getPrice();
-        this.region = game.getRegion();
-    }
 }

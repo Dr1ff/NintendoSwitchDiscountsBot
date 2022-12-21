@@ -1,6 +1,6 @@
 package com.example.nintendoswitchdiscountsbot.service.storage;
 
-import com.example.nintendoswitchdiscountsbot.dto.User;
+import com.example.nintendoswitchdiscountsbot.business.User;
 import com.example.nintendoswitchdiscountsbot.entity.UserEntity;
 import com.example.nintendoswitchdiscountsbot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,26 +11,26 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserStorageService {
-    private UserRepository repository;
+    private final UserRepository repository;
 
-    public User get(Long id) {
-        return new User(find(id));
+    public Optional<User> findById(Long id) {
+        var userEntityO = repository.findById(id);
+        if (userEntityO.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(fromEntity(userEntityO.get()));
+        }
+    }
+
+    private User fromEntity(UserEntity entity) {
+        return new User(entity.getId(), entity.getWishlist(), entity.getCountry());
     }
 
     public void add(User user) {
-        repository.save(new UserEntity(user));
+        repository.save(new UserEntity(user.getId(), user.getWishlist(), user.getCountry()));
     }
 
     public void delete(User user) {
-        repository.delete(find(user.getId()));
-    }
-
-    private UserEntity find(Long id) {
-        Optional<UserEntity> notificationO = repository.findById(id);
-        if(notificationO.isPresent()) {
-            return notificationO.get();
-        } else {
-            throw new RuntimeException("User with this id not found");
-        }
+        repository.delete(new UserEntity(user.getId(), user.getWishlist(), user.getCountry()));
     }
 }
