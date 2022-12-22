@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import com.example.nintendoswitchdiscountsbot.enums.Country;
@@ -50,6 +52,7 @@ public class GameEntity {
         @Column(name = "name", nullable = false)
         private String name;
 
+        @Enumerated(EnumType.STRING)
         @Column(name = "country", nullable = false)
         private Country country;
     }
