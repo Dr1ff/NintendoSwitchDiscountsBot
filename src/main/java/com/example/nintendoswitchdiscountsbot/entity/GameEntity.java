@@ -41,6 +41,7 @@ public class GameEntity {
         @Column(name = "name", nullable = false)
         private String name;
 
+        @Enumerated(EnumType.STRING)
         @Column(name = "country", nullable = false)
         private Country country;
     }
