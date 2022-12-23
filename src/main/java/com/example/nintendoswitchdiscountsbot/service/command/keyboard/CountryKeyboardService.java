@@ -1,4 +1,4 @@
-package com.example.nintendoswitchdiscountsbot.service.keyboard;
+package com.example.nintendoswitchdiscountsbot.service.command.keyboard;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Country;

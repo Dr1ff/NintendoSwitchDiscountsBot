@@ -1,7 +1,7 @@
 package com.example.nintendoswitchdiscountsbot.service.command.processor.message;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
-import com.example.nintendoswitchdiscountsbot.service.keyboard.CountryKeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.command.keyboard.CountryKeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.observer.MessageEventPublisher;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.RequiredArgsConstructor;

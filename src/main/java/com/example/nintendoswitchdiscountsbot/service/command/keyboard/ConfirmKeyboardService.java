@@ -1,4 +1,4 @@
-package com.example.nintendoswitchdiscountsbot.service.keyboard;
+package com.example.nintendoswitchdiscountsbot.service.command.keyboard;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
@@ -24,7 +24,7 @@ public class ConfirmKeyboardService implements KeyboardService{
     public InlineKeyboardMarkup getMarkup(CallbackCommandData commandData) {
         var row = new ArrayList<InlineKeyboardButton>();
         row.add(getButton(parseToCancel(commandData)));
-        row.add(getButton(parseToAssert(commandData)));
+        row.add(getButton(parseToAccept(commandData)));
         return new InlineKeyboardMarkup(List.of(row));
     }
 
@@ -35,10 +35,10 @@ public class ConfirmKeyboardService implements KeyboardService{
         button.setCallbackData(objectMapper.writeValueAsString(commandData));
         return button;
     }
-    private CallbackCommandData parseToAssert(CallbackCommandData commandData) {
+    private CallbackCommandData parseToAccept(CallbackCommandData commandData) {
         var assertData = new CallbackCommandData();
         assertData.setCommand(Command.REGISTER);
-        assertData.setSubcommand(Subcommand.ASSERT);
+        assertData.setSubcommand(Subcommand.ACCEPT);
         assertData.setSubcommandArgs(List.of(
                 commandData.getSubcommandArgs().get(0)
         ));
