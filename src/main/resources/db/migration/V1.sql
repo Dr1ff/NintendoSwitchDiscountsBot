@@ -7,10 +7,13 @@ CREATE TABLE discount (
 );
 
 CREATE TABLE game (
-                      id BIGINT PRIMARY KEY,
-                      "name" VARCHAR(255),
-                      price NUMERIC(19, 2),
-                      region VARCHAR(255)
+                      "name" TEXT NOT NULL,
+                      country TEXT NOT NULL,
+                      actual_price NUMERIC NOT NULL,
+                      price_without_discount NUMERIC,
+                      discount_percent FLOAT8,
+                      price_valid_until TIMESTAMP,
+                      is_discount BOOLEAN NOT NULL
 );
 
 CREATE TABLE notification (
