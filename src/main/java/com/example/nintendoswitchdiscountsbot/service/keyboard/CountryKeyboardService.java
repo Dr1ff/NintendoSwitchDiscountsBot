@@ -1,4 +1,4 @@
-package com.example.nintendoswitchdiscountsbot.service.command.register;
+package com.example.nintendoswitchdiscountsbot.service.keyboard;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Country;
@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.*;
 
 @Service
-public class CountryKeyboardService {
+public class CountryKeyboardService implements KeyboardService{
 
     private final List<InlineKeyboardButton> countryButtons;
     private final ObjectMapper objectMapper;
@@ -35,7 +35,7 @@ public class CountryKeyboardService {
                     CallbackCommandData data = new CallbackCommandData();
                     data.setCommand(Command.REGISTER);
                     data.setSubcommand(Subcommand.CONFIRM);
-                    data.setSubcommandArgs(List.of(country.name()));
+                    data.setSubcommandArgs(List.of(country.name(), String.valueOf(country.ordinal())));
                     try {
                         button.setCallbackData(objectMapper.writeValueAsString(data));
                     } catch (JsonProcessingException e) {
@@ -48,69 +48,64 @@ public class CountryKeyboardService {
     public InlineKeyboardMarkup getMarkup() {
         var commandData = new CallbackCommandData();
         commandData.setCommand(Command.REGISTER);
-        commandData.setSubcommand(Subcommand.PREV);
-        commandData.setSubcommandArgs(List.of(
-                String.valueOf(11),
-                commandData.getSubcommand().getButtonText()
-        ));
+        setSubcommandData(Subcommand.PREV, commandData, 8);
         return getMarkup(commandData);
     }
 
     public InlineKeyboardMarkup getMarkup(CallbackCommandData commandData) {
         if(commandData.getSubcommand().equals(Subcommand.NEXT)) {
             return getNext(commandData);
-        } else {
+        } else if (commandData.getSubcommand().equals(Subcommand.PREV)) {
             return getPrev(commandData);
+        } else {
+            setSubcommandData(
+                    Subcommand.NEXT,
+                    commandData,
+                    Integer.parseInt(commandData.getSubcommandArgs().get(0)));
+            return getNext(commandData);
         }
     }
 
     private InlineKeyboardMarkup getNext(CallbackCommandData commandData) {
         var rows = getRows();
-        List<InlineKeyboardButton> countryButtonsSublist;
         int firstIndex = Integer.parseInt(commandData.getSubcommandArgs().get(0));
-        int lastIndex = firstIndex + 10;
-
-        if (lastIndex <= countryButtons.size() - 1) {
-            countryButtonsSublist = countryButtons.subList(firstIndex, lastIndex);
+        int lastIndex = firstIndex + 9;
+        if(firstIndex <= 0) {
+            rows.get(3).add(getEmptyButton());
         } else {
-            countryButtonsSublist = countryButtons.subList(firstIndex, countryButtons.size() - 1);
-        }
-
-        Iterator<InlineKeyboardButton> buttonIterator = countryButtonsSublist.iterator();
-        setSubcommandData(Subcommand.PREV, commandData, firstIndex - 1);
-        rows.get(1).add(getButton(commandData));
-        assembleRows(rows, buttonIterator);
-
-        if(buttonIterator.hasNext()) {
-            setSubcommandData(Subcommand.NEXT, commandData, lastIndex + 1);
+            setSubcommandData(Subcommand.PREV, commandData, firstIndex - 1);
             rows.get(3).add(getButton(commandData));
         }
+        if (lastIndex > countryButtons.size() - 1) {
+            lastIndex = countryButtons.size();
+            rows.get(3).add(getEmptyButton());
+        } else {
+            setSubcommandData(Subcommand.NEXT, commandData, lastIndex);
+            rows.get(3).add(getButton(commandData));
+        }
+        List<InlineKeyboardButton> countryButtonsSublist = countryButtons.subList(firstIndex, lastIndex);
+        Iterator<InlineKeyboardButton> buttonIterator = countryButtonsSublist.iterator();
+        assembleRows(rows, buttonIterator);
         return new InlineKeyboardMarkup(rows);
     }
 
     private InlineKeyboardMarkup getPrev(CallbackCommandData commandData) {
         var rows = getRows();
-        List<InlineKeyboardButton> countryButtonsSublist;
         int lastIndex = Integer.parseInt(commandData.getSubcommandArgs().get(0));
-        int firstIndex = lastIndex - 10;
-
-        if(firstIndex > 0) {
-            countryButtonsSublist = countryButtons.subList(firstIndex, lastIndex);
+        int firstIndex = lastIndex - 8;
+        if(firstIndex == 0) {
+            rows.get(3).add(getEmptyButton());
         } else {
-            countryButtonsSublist = countryButtons.subList(0, lastIndex);
+            setSubcommandData(Subcommand.PREV, commandData, firstIndex - 1);
+            rows.get(3).add(getButton(commandData));
         }
-        Iterator<InlineKeyboardButton> buttonIterator = countryButtonsSublist.iterator();
-
-        if(firstIndex <= 0) {
-            rows.get(1).add(buttonIterator.next());
-        } else {
-            commandData.setSubcommandArgs(List.of(
-                    String.valueOf(firstIndex - 1)));
-            rows.get(1).add(getButton(commandData));
-        }
-        assembleRows(rows, buttonIterator);
-        setSubcommandData(Subcommand.NEXT, commandData, lastIndex + 1);
+        setSubcommandData(Subcommand.NEXT, commandData, ++lastIndex);
         rows.get(3).add(getButton(commandData));
+
+
+        List<InlineKeyboardButton> countryButtonsSublist = countryButtons.subList(firstIndex, lastIndex);
+        Iterator<InlineKeyboardButton> buttonIterator = countryButtonsSublist.iterator();
+        assembleRows(rows, buttonIterator);
         return new InlineKeyboardMarkup(rows);
     }
 
@@ -134,17 +129,25 @@ public class CountryKeyboardService {
         return button;
     }
 
+    @SneakyThrows
+    private InlineKeyboardButton getEmptyButton() {
+        var commandData = new CallbackCommandData();
+        commandData.setCommand(Command.BREAK);
+        var empty = new InlineKeyboardButton(" ");
+        empty.setCallbackData(objectMapper.writeValueAsString(commandData));
+        return empty;
+    }
+
     private void assembleRows(List<List<InlineKeyboardButton>> rows, Iterator<InlineKeyboardButton> buttonIterator) {
-        assembleRow(rows.get(1), buttonIterator, 3);
-        assembleRow(rows.get(2), buttonIterator, 4);
-        assembleRow(rows.get(3), buttonIterator, 3);
+        assembleRow(rows.get(0), buttonIterator);
+        assembleRow(rows.get(1), buttonIterator);
+        assembleRow(rows.get(2), buttonIterator);
     }
     private void assembleRow(
             List<InlineKeyboardButton> row,
-            Iterator<InlineKeyboardButton> iterator,
-            int buttons
+            Iterator<InlineKeyboardButton> iterator
         ) {
-                for(int i = 0; i < buttons && iterator.hasNext(); i++) {
+                for(int i = 0; i < 3 && iterator.hasNext(); i++) {
                 row.add(iterator.next());
                 }
     }
@@ -153,9 +156,12 @@ public class CountryKeyboardService {
         return List.of(
                 new ArrayList<>(),
                 new ArrayList<>(),
+                new ArrayList<>(),
                 new ArrayList<>()
         );
     }
 
-
+    public Set<Subcommand> getSubcommand() {
+        return Set.of(Subcommand.PREV, Subcommand.NEXT, Subcommand.CANCEL);
+    }
 }

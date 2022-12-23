@@ -7,7 +7,9 @@ import lombok.Getter;
 public enum Subcommand {
     PREV(":arrow_left:"),
     NEXT(":arrow_right:"),
-    CONFIRM("");
+    CONFIRM(""),
+    ASSERT(":white_check_mark:"),
+    CANCEL(":x:");
 
     private final String buttonText;
 
