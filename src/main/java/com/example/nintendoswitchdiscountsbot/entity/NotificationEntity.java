@@ -2,11 +2,13 @@ package com.example.nintendoswitchdiscountsbot.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.Instant;
-
 @Data
+@Entity
+@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "notification")
 public class NotificationEntity {

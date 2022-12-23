@@ -1,11 +1,15 @@
 package com.example.nintendoswitchdiscountsbot.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Data
+@Entity
+@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "game")
 public class GameEntity {

@@ -23,6 +23,6 @@ CREATE TABLE notification (
 
 CREATE TABLE "user" (
                         id BIGINT PRIMARY KEY ,
-                        region VARCHAR(255),
+                        country VARCHAR(255),
                         wishlist BIGINT
 );
