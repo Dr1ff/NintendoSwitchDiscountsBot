@@ -1,8 +1,11 @@
 package com.example.nintendoswitchdiscountsbot.service.command.keyboard;
 
-import com.example.nintendoswitchdiscountsbot.enums.Command;
+import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackCommandData;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackData;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackParser;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.CountrySubcommandArgs;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.IntSubcommandArgs;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -10,52 +13,80 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class ConfirmKeyboardService implements KeyboardService{
+public class ConfirmKeyboardService implements KeyboardService {
+
+    private final static int NUMBER_OF_BUTTONS = 9;
 
     private final ObjectMapper objectMapper;
+    private final CallbackParser callbackParser;
 
-
-    public InlineKeyboardMarkup getMarkup(CallbackCommandData commandData) {
-        var row = new ArrayList<InlineKeyboardButton>();
-        row.add(getButton(parseToCancel(commandData)));
-        row.add(getButton(parseToAccept(commandData)));
-        return new InlineKeyboardMarkup(List.of(row));
-    }
-
-    @SneakyThrows
-    private InlineKeyboardButton getButton(CallbackCommandData commandData) {
-        var button = new InlineKeyboardButton();
-        button.setText(commandData.getSubcommand().getButtonText());
-        button.setCallbackData(objectMapper.writeValueAsString(commandData));
-        return button;
-    }
-    private CallbackCommandData parseToAccept(CallbackCommandData commandData) {
-        var assertData = new CallbackCommandData();
-        assertData.setCommand(Command.REGISTER);
-        assertData.setSubcommand(Subcommand.ACCEPT);
-        assertData.setSubcommandArgs(List.of(
-                commandData.getSubcommandArgs().get(0)
-        ));
-        return assertData;
-    }
-
-    private CallbackCommandData parseToCancel(CallbackCommandData commandData) {
-        var cancelData = new CallbackCommandData();
-        int indicator = (Integer.parseInt(commandData.getSubcommandArgs().get(1)) / 9) * 9;
-        cancelData.setCommand(Command.REGISTER);
-        cancelData.setSubcommand(Subcommand.CANCEL);
-        cancelData.setSubcommandArgs(List.of(String.valueOf(indicator)));
-        return cancelData;
+    @Override
+    public InlineKeyboardMarkup getMarkup(CallbackData callbackData) {
+        return InlineKeyboardMarkup.builder()
+                .keyboardRow(List.of(
+                                getCancelButton(callbackData),
+                                getAcceptButton(callbackData)
+                        )
+                )
+                .build();
     }
 
     @Override
     public Set<Subcommand> getSubcommand() {
         return Set.of(Subcommand.CONFIRM);
+    }
+
+    @SneakyThrows
+    private InlineKeyboardButton getCancelButton(CallbackData callbackData) {
+        return InlineKeyboardButton.builder()
+                .text(Subcommand.CANCEL.getButtonText())
+                .callbackData(objectMapper.writeValueAsString(callbackParser.fromData(callbackData.toBuilder()
+                                        .subcommand(Subcommand.CANCEL)
+                                        .subcommandArgs(getCancelArgs(
+                                                        ((CountrySubcommandArgs) callbackData.subcommandArgs())
+                                                                .country()
+                                                )
+                                        )
+                                        .build()
+                                )
+                        )
+                )
+                .build();
+    }
+
+    @SneakyThrows
+    private InlineKeyboardButton getAcceptButton(CallbackData callbackData) {
+        return InlineKeyboardButton.builder()
+                .text(Subcommand.ACCEPT.getButtonText())
+                .callbackData(objectMapper.writeValueAsString(callbackParser.fromData(callbackData.toBuilder()
+                                        .subcommand(Subcommand.ACCEPT)
+                                        .subcommandArgs(getAcceptArgs(
+                                                        ((CountrySubcommandArgs) callbackData.subcommandArgs())
+                                                                .country()
+                                                )
+                                        )
+                                        .build()
+                                )
+                        )
+
+                )
+                .build();
+    }
+
+    private IntSubcommandArgs getCancelArgs(Country country) {
+        return IntSubcommandArgs.builder()
+                .firstButtonIndex(((country.ordinal()) / NUMBER_OF_BUTTONS) * NUMBER_OF_BUTTONS)
+                .build();
+    }
+
+    private CountrySubcommandArgs getAcceptArgs(Country country) {
+        return CountrySubcommandArgs.builder()
+                .country(country)
+                .build();
     }
 }

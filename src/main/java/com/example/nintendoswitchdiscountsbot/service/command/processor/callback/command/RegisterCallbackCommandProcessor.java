@@ -1,7 +1,9 @@
-package com.example.nintendoswitchdiscountsbot.service.command.processor.callback;
+package com.example.nintendoswitchdiscountsbot.service.command.processor.callback.command;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackData;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackDto;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.CallbackSubcommandProcessor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -22,8 +24,8 @@ public class RegisterCallbackCommandProcessor implements CallbackCommandProcesso
         this.processors = map;
     }
 
-    public void process(CallbackQuery callbackQuery, CallbackCommandData commandData) {
-         processors.get(commandData.getSubcommand()).process(callbackQuery, commandData);
+    public void process(CallbackQuery callbackQuery, CallbackData callbackData) {
+         processors.get(callbackData.subcommand()).process(callbackQuery, callbackData);
     }
 
     public Command getCommand() {

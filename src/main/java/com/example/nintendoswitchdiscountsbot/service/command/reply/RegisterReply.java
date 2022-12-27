@@ -1,17 +1,17 @@
 package com.example.nintendoswitchdiscountsbot.service.command.reply;
 
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackCommandData;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackData;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.util.Set;
 
-public interface RegisterReplyBuilder {
+public interface RegisterReply {
 
-    void build(
+    void reply(
             CallbackQuery callbackQuery,
-            CallbackCommandData commandData,
+            CallbackData callbackData,
             InlineKeyboardMarkup replyMarkup
             );
 

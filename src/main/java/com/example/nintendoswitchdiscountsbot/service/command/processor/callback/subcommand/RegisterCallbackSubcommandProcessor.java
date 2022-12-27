@@ -1,8 +1,9 @@
 package com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand;
 
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackCommandData;
-import com.example.nintendoswitchdiscountsbot.service.command.reply.RegisterReplyBuilder;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackData;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackDto;
+import com.example.nintendoswitchdiscountsbot.service.command.reply.RegisterReply;
 import com.example.nintendoswitchdiscountsbot.service.command.keyboard.KeyboardService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -14,19 +15,19 @@ import java.util.Set;
 
 @Component
 public class RegisterCallbackSubcommandProcessor implements CallbackSubcommandProcessor {
-    private final Map<Subcommand, KeyboardService> keyboardServices;
-    private final Map<Subcommand, RegisterReplyBuilder> replyBuilders;
 
+    private final Map<Subcommand, KeyboardService> keyboardServices;
+    private final Map<Subcommand, RegisterReply> replyBuilders;
 
     public RegisterCallbackSubcommandProcessor(
             List<KeyboardService> keyboardServices,
-            List<RegisterReplyBuilder> replyBuilders
+            List<RegisterReply> replyBuilders
     ) {
         Map<Subcommand, KeyboardService> keyboardServiceMap = new HashMap<>();
         keyboardServices.forEach(keyboardService -> keyboardService.getSubcommand()
                 .forEach(subcommand -> keyboardServiceMap.put(subcommand, keyboardService))
         );
-        Map<Subcommand, RegisterReplyBuilder> replyBuilderMap = new HashMap<>();
+        Map<Subcommand, RegisterReply> replyBuilderMap = new HashMap<>();
         replyBuilders.forEach(replyBuilder -> replyBuilder.getSubcommand()
                 .forEach(subcommand -> replyBuilderMap.put(subcommand, replyBuilder)));
         this.keyboardServices = keyboardServiceMap;
@@ -34,14 +35,11 @@ public class RegisterCallbackSubcommandProcessor implements CallbackSubcommandPr
     }
 
     @Override
-    public void process(CallbackQuery callbackQuery, CallbackCommandData commandData) {
+    public void process(CallbackQuery callbackQuery, CallbackData callbackData) {
         replyBuilders.get(
-                commandData.getSubcommand()).build(callbackQuery, commandData,
-                keyboardServices.get(commandData.getSubcommand()).getMarkup(commandData));
+                callbackData.subcommand()).reply(callbackQuery, callbackData,
+                keyboardServices.get(callbackData.subcommand()).getMarkup(callbackData));
     }
-
-
-
 
     @Override
     public Set<Subcommand> getSubcommand() {

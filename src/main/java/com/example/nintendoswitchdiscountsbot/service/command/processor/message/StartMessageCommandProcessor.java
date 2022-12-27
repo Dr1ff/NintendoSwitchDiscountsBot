@@ -18,7 +18,7 @@ public class StartMessageCommandProcessor implements MessageCommandProcessor {
     public void process(Message message) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText(getMessageText(message.getFrom().getFirstName()));
-        sendMessage.setReplyMarkup(keyboardService.getMarkup());
+        sendMessage.setReplyMarkup(keyboardService.getFirstPageKeyboardMarkup());
         sendMessage.setChatId(message.getChatId());
         messageEventPublisher.publish(sendMessage);
     }

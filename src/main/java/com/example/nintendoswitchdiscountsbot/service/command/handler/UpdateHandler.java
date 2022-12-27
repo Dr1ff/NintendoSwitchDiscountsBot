@@ -1,8 +1,9 @@
 package com.example.nintendoswitchdiscountsbot.service.command.handler;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
-import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackCommandData;
-import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackCommandProcessor;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackDto;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackParser;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.command.CallbackCommandProcessor;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.message.MessageCommandProcessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -17,16 +18,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class UpdateHandler {
+
     private final Map<Command, MessageCommandProcessor> commandProcessors;
     private final Map<Command, CallbackCommandProcessor> callbackProcessors;
-
     private final ObjectMapper objectMapper;
+    private final CallbackParser callbackParser;
 
     public UpdateHandler(
             List<MessageCommandProcessor> commandProcessors,
             List<CallbackCommandProcessor> callbackProcessors,
-            ObjectMapper objectMapper
-    ) {
+            ObjectMapper objectMapper,
+            CallbackParser callbackParser) {
         this.commandProcessors = commandProcessors
                 .stream()
                 .collect(Collectors.toMap(MessageCommandProcessor::getCommand, Function.identity()));
@@ -34,6 +36,7 @@ public class UpdateHandler {
                 .stream()
                 .collect(Collectors.toMap(CallbackCommandProcessor::getCommand, Function.identity()));
         this.objectMapper = objectMapper;
+        this.callbackParser = callbackParser;
     }
 
 
@@ -44,10 +47,11 @@ public class UpdateHandler {
            Optional<Command> commandO = Optional.of(Command.valueOf(messageText));
            commandO.ifPresent(command -> commandProcessors.get(command).process(update.getMessage()));
        } else if(update.hasCallbackQuery()) {
-           var callbackCommandData =
-                   objectMapper.readValue(update.getCallbackQuery().getData(), CallbackCommandData.class);
+           var callbackData = callbackParser.fromDto(
+                   objectMapper.readValue(update.getCallbackQuery().getData(), CallbackDto.class));
+
            callbackProcessors.get(
-                   callbackCommandData.getCommand()).process(update.getCallbackQuery(), callbackCommandData);
+                   callbackData.command()).process(update.getCallbackQuery(), callbackData);
        }
     }
 }
