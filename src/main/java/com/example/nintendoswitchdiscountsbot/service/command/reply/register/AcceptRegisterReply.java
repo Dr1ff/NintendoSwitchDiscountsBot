@@ -31,6 +31,32 @@ public class AcceptRegisterReply implements RegisterReply {
     ) {
         userStorageService.add(new User(
                         callbackQuery.getFrom().getId(),
+                        ((CountrySubcommandArgs) callbackData.subcommandArgs()).country().name()
+                )
+        );
+        messageEventPublisher.publish(
+                EditMessageText.builder()
+                        .messageId(callbackQuery.getMessage().getMessageId())
+                        .chatId(callbackQuery.getMessage().getChatId())
+                        .text(
+                                String.format(
+                                        """
+                                                Регион %s успешно установлен!
+                                                Цены на игры в боте будут указаны в валюте выбранного региона.
+                                                Вы всегда можете изменить его в меню бота.
+                                                Приступим к работе?""",
+                                        ((CountrySubcommandArgs) callbackData.subcommandArgs()).country() +
+                                                EmojiManager.getForAlias(
+                                                        ((CountrySubcommandArgs) callbackData.subcommandArgs())
+                                                                .country().name()
+                                                                .toLowerCase(Locale.ROOT)
+                                                ).getUnicode()
+                                )
+                        )
+                        .replyMarkup(replyMarkup)
+                        .build()
+        );
+                        callbackQuery.getFrom().getId(),
                         ((CountrySubcommandArgs) callbackData.subcommandArgs().orElseThrow(
                                 () -> new IllegalArgumentException(
                                         "В AcceptKeyboardService попала callbackData " +
