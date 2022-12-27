@@ -12,5 +12,7 @@ public record CallbackData(
         CommandArgs commandArgs,
         SubcommandArgs subcommandArgs
 ) {
-    @Builder(toBuilder = true) public CallbackData {}
+    @Builder(toBuilder = true)
+    public CallbackData {
+    }
 }
