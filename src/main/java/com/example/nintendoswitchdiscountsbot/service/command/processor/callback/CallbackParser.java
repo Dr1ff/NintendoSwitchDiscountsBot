@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 public class CallbackParser {
 
     private final Map<Command, Map<Subcommand, SubcommandArgsCreator>> subcommandArgsCreators;
-
     private final Map<Command, CommandArgsCreator> commandArgsCreators;
 
     public CallbackParser(

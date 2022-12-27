@@ -15,6 +15,7 @@ import java.util.Set;
 @Component
 @RequiredArgsConstructor
 public class CancelRegisterReply implements RegisterReply {
+
     private final MessageEventPublisher messageEventPublisher;
 
     @Override
@@ -23,12 +24,14 @@ public class CancelRegisterReply implements RegisterReply {
             CallbackData callbackData,
             InlineKeyboardMarkup replyMarkup
     ) {
-        var reply = new EditMessageText();
-        reply.setChatId(callbackQuery.getMessage().getChatId());
-        reply.setMessageId(callbackQuery.getMessage().getMessageId());
-        reply.setText("Для начала работы бота, выберите регион:");
-        reply.setReplyMarkup(replyMarkup);
-        messageEventPublisher.publish(reply);
+        messageEventPublisher.publish(
+                EditMessageText.builder()
+                        .messageId(callbackQuery.getMessage().getMessageId())
+                        .chatId(callbackQuery.getMessage().getChatId())
+                        .text("Для начала работы бота, выберите регион:")
+                        .replyMarkup(replyMarkup)
+                        .build()
+        );
     }
 
     @Override

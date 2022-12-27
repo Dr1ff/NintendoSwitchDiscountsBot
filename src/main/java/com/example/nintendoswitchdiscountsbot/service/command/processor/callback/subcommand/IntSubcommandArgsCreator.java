@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Component
 public class IntSubcommandArgsCreator implements SubcommandArgsCreator {
+
     @Override
     public SubcommandArgs create(List<String> dtoArgs) {
         return IntSubcommandArgs.builder()

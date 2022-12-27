@@ -21,19 +21,20 @@ public class ConfirmRegisterReply implements RegisterReply {
 
     private final MessageEventPublisher messageEventPublisher;
 
-
     @Override
     public void reply(
             CallbackQuery callbackQuery,
             CallbackData callbackData,
             InlineKeyboardMarkup replyMarkup
     ) {
-        var reply = new EditMessageText();
-        reply.setText(getConfirmText(callbackData));
-        reply.setChatId(callbackQuery.getMessage().getChatId());
-        reply.setMessageId(callbackQuery.getMessage().getMessageId());
-        reply.setReplyMarkup(replyMarkup);
-        messageEventPublisher.publish(reply);
+        messageEventPublisher.publish(
+                EditMessageText.builder()
+                        .messageId(callbackQuery.getMessage().getMessageId())
+                        .chatId(callbackQuery.getMessage().getChatId())
+                        .text(getConfirmText(callbackData))
+                        .replyMarkup(replyMarkup)
+                        .build()
+        );
     }
 
     @Override
@@ -43,8 +44,11 @@ public class ConfirmRegisterReply implements RegisterReply {
 
     public String getConfirmText(CallbackData callbackData) {
         var country = (((CountrySubcommandArgs) callbackData.subcommandArgs()).country());
-        return String.format("Выбранный регион: %s. \nПодтвердите ваш выбор.", country
-                + EmojiManager.getForAlias(
-                country.name().toLowerCase(Locale.ROOT)).getUnicode());
+        return String.format(
+                "Выбранный регион: %s. \nПодтвердите ваш выбор.",
+                country + EmojiManager
+                        .getForAlias(country.name().toLowerCase(Locale.ROOT))
+                        .getUnicode()
+        );
     }
 }

@@ -8,9 +8,7 @@ import java.util.Set;
 
 public interface KeyboardService {
 
-
     InlineKeyboardMarkup getMarkup(CallbackData callbackData);
 
     Set<Subcommand> getSubcommand();
-
 }

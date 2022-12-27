@@ -12,8 +12,10 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @Service
 @RequiredArgsConstructor
 public class StartMessageCommandProcessor implements MessageCommandProcessor {
+
     private final CountryKeyboardService keyboardService;
     private final MessageEventPublisher messageEventPublisher;
+
     @Override
     public void process(Message message) {
         SendMessage sendMessage = new SendMessage();
@@ -28,7 +30,6 @@ public class StartMessageCommandProcessor implements MessageCommandProcessor {
         return Command.START;
     }
 
-
     private String getMessageText(String userFirstName) {
         return EmojiParser.parseToUnicode("Привет, " +
                 userFirstName +
@@ -37,6 +38,4 @@ public class StartMessageCommandProcessor implements MessageCommandProcessor {
                 ":wave:" +
                 "\nДля начала работы выберите ваш регион:");
     }
-
-
 }

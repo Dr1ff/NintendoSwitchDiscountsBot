@@ -3,7 +3,6 @@ package com.example.nintendoswitchdiscountsbot.service.command.processor.callbac
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackData;
-import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackDto;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.CallbackSubcommandProcessor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -14,6 +13,7 @@ import java.util.Map;
 
 @Component
 public class RegisterCallbackCommandProcessor implements CallbackCommandProcessor {
+
     private final Map<Subcommand, CallbackSubcommandProcessor> processors;
 
     public RegisterCallbackCommandProcessor(List<CallbackSubcommandProcessor> processors) {

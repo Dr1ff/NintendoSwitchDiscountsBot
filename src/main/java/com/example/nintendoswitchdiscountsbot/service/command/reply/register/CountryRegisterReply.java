@@ -24,11 +24,13 @@ public class CountryRegisterReply implements RegisterReply {
             CallbackData callbackData,
             InlineKeyboardMarkup replyMarkup
     ) {
-        var reply = new EditMessageReplyMarkup();
-        reply.setChatId(callbackQuery.getMessage().getChatId());
-        reply.setMessageId(callbackQuery.getMessage().getMessageId());
-        reply.setReplyMarkup(replyMarkup);
-        messageEventPublisher.publish(reply);
+        messageEventPublisher.publish(
+                EditMessageReplyMarkup.builder()
+                        .messageId(callbackQuery.getMessage().getMessageId())
+                        .chatId(callbackQuery.getMessage().getChatId())
+                        .replyMarkup(replyMarkup)
+                        .build()
+        );
     }
 
     @Override

@@ -16,13 +16,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 import java.util.Locale;
 import java.util.Set;
+
 @Component
 @RequiredArgsConstructor
 public class AcceptRegisterReply implements RegisterReply {
 
     private final MessageEventPublisher messageEventPublisher;
     private final UserStorageService userStorageService;
-
 
     @Override
     public void reply(
@@ -31,25 +31,32 @@ public class AcceptRegisterReply implements RegisterReply {
             InlineKeyboardMarkup replyMarkup
     ) {
         userStorageService.add(new User(
-                callbackQuery.getFrom().getId(),
-                ((CountrySubcommandArgs) callbackData.subcommandArgs()).country().name()
-        ));
-        var reply = new EditMessageText();
-        reply.setChatId(callbackQuery.getMessage().getChatId());
-        reply.setMessageId(callbackQuery.getMessage().getMessageId());
-        reply.setText(String.format("""
-                        Регион %s успешно установлен!
-                        Цены на игры в боте будут указаны в валюте выбранного региона.
-                        Вы всегда можете изменить его в меню бота.
-                        Приступим к работе?""",
-                ((CountrySubcommandArgs) callbackData.subcommandArgs()).country() +
-                        EmojiManager.getForAlias(
-                                ((CountrySubcommandArgs) callbackData.subcommandArgs())
-                                        .country().name()
-                                        .toLowerCase(Locale.ROOT)
-                        ).getUnicode()));
-        reply.setReplyMarkup(replyMarkup);
-        messageEventPublisher.publish(reply);
+                        callbackQuery.getFrom().getId(),
+                        ((CountrySubcommandArgs) callbackData.subcommandArgs()).country().name()
+                )
+        );
+        messageEventPublisher.publish(
+                EditMessageText.builder()
+                        .messageId(callbackQuery.getMessage().getMessageId())
+                        .chatId(callbackQuery.getMessage().getChatId())
+                        .text(
+                                String.format(
+                                        """
+                                                Регион %s успешно установлен!
+                                                Цены на игры в боте будут указаны в валюте выбранного региона.
+                                                Вы всегда можете изменить его в меню бота.
+                                                Приступим к работе?""",
+                                        ((CountrySubcommandArgs) callbackData.subcommandArgs()).country() +
+                                                EmojiManager.getForAlias(
+                                                        ((CountrySubcommandArgs) callbackData.subcommandArgs())
+                                                                .country().name()
+                                                                .toLowerCase(Locale.ROOT)
+                                                ).getUnicode()
+                                )
+                        )
+                        .replyMarkup(replyMarkup)
+                        .build()
+        );
     }
 
     @Override
