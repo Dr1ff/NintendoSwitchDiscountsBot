@@ -5,6 +5,7 @@ import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackData;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackParser;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.command.CommandArgsImpl;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.CountrySubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.IntSubcommandArgs;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,16 +26,16 @@ public class CountryKeyboardService implements KeyboardService {
     private final static int NUMBER_OF_ROWS = 3;
     private final static int ARROWS_ROW_INDEX = 3;
 
-    private final List<InlineKeyboardButton> countryButtons;
-    private final ObjectMapper objectMapper;
     private final CallbackParser callbackParser;
+    private final ObjectMapper objectMapper;
+    private final List<InlineKeyboardButton> countryButtons;
 
     public CountryKeyboardService(ObjectMapper objectMapper, CallbackParser callbackParser) {
+        this.objectMapper = objectMapper;
+        this.callbackParser = callbackParser;
         this.countryButtons = Arrays.stream(Country.values())
                 .map(this::getCountryButton)
                 .toList();
-        this.objectMapper = objectMapper;
-        this.callbackParser = callbackParser;
     }
 
     @Override
@@ -99,6 +100,10 @@ public class CountryKeyboardService implements KeyboardService {
     public InlineKeyboardMarkup getFirstPageKeyboardMarkup() {
         return getMarkup(CallbackData.builder()
                 .command(Command.REGISTER)
+                .commandArgs(CommandArgsImpl.builder()
+                        .commandArgs("")
+                        .build()
+                )
                 .subcommandArgs(IntSubcommandArgs.builder()
                         .firstButtonIndex(0)
                         .build()

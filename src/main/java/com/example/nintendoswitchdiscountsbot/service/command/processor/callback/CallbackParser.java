@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class CallbackParser {
@@ -30,41 +28,57 @@ public class CallbackParser {
             creator.getSubcommands().forEach(subcommand ->
                     this.subcommandArgsCreators.get(creator.getCommand()).put(subcommand, creator));
         });
-        this.commandArgsCreators = commandArgsCreators
-                .stream()
-                .collect(Collectors.toMap(CommandArgsCreator::getCommand, Function.identity()));
+        this.commandArgsCreators = new HashMap<>();
+        commandArgsCreators.forEach(creator -> creator.getCommands()
+                .forEach(command -> this.commandArgsCreators.put(command, creator))
+        );
     }
 
     public CallbackData fromDto(CallbackDto dto) {
-        return CallbackData.builder()
-                .command(dto.command())
-                .commandArgs(
-                        commandArgsCreators.get(dto.command())
-                                .create(dto.commandArgs())
-                )
-                .subcommand(dto.subcommand())
-                .subcommandArgs(
-                        subcommandArgsCreators
-                                .get(dto.command())
-                                .get(dto.subcommand())
-                                .create(dto.subcommandArgs())
-                )
-                .build();
+        var builder = new CallbackData.CallbackDataBuilder();
+        if (dto.command() != null) {
+            builder.command(dto.command());
+        }
+        if (dto.commandArgs() != null) {
+            builder.commandArgs(commandArgsCreators
+                    .get(dto.command())
+                    .create(dto.commandArgs())
+            );
+        }
+        if (dto.subcommand() != null) {
+            builder.subcommand(dto.subcommand());
+        }
+        if (dto.subcommandArgs() != null) {
+            builder.subcommandArgs(subcommandArgsCreators
+                    .get(dto.command())
+                    .get(dto.subcommand())
+                    .create(dto.subcommandArgs())
+            );
+        }
+        return builder.build();
     }
 
     public CallbackDto fromData(CallbackData data) {
-        return CallbackDto.builder()
-                .command(data.command())
-                .commandArgs(commandArgsCreators
-                        .get(data.command())
-                        .toList(data.commandArgs())
-                )
-                .subcommand(data.subcommand())
-                .subcommandArgs(subcommandArgsCreators
-                        .get(data.command())
-                        .get(data.subcommand())
-                        .toList(data.subcommandArgs())
-                )
-                .build();
+        var builder = new CallbackDto.CallbackDtoBuilder();
+        if (data.command() != null) {
+            builder.command(data.command());
+        }
+        if (data.commandArgs() != null) {
+            builder.commandArgs(commandArgsCreators
+                    .get(data.command())
+                    .toList(data.commandArgs())
+            );
+        }
+        if (data.subcommand() != null) {
+            builder.subcommand(data.subcommand());
+        }
+        if (data.subcommandArgs() != null) {
+            builder.subcommandArgs(subcommandArgsCreators
+                    .get(data.command())
+                    .get(data.subcommand())
+                    .toList(data.subcommandArgs())
+            );
+        }
+        return builder.build();
     }
 }

@@ -4,6 +4,7 @@ import com.example.nintendoswitchdiscountsbot.enums.Command;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class CommandArgsCreatorImpl implements CommandArgsCreator {
@@ -21,8 +22,8 @@ public class CommandArgsCreatorImpl implements CommandArgsCreator {
     }
 
     @Override
-    public Command getCommand() {
-        return Command.REGISTER;
+    public Set<Command> getCommands() {
+        return Set.of(Command.REGISTER, Command.BREAK);
     }
 
 }
