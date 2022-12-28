@@ -7,9 +7,9 @@ import java.util.Set;
 
 public interface CommandArgsCreator {
 
-    CommandArgs create(List<String> dtoArgs);
+    CommandArgs fromArgsList(List<String> dtoArgs);
 
-    List<String> toList(CommandArgs commandArgs);
+    List<String> toArgsList(CommandArgs commandArgs);
 
     Set<Command> getCommands();
 }

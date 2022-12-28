@@ -18,11 +18,12 @@ public class StartMessageCommandProcessor implements MessageCommandProcessor {
 
     @Override
     public void process(Message message) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setText(getMessageText(message.getFrom().getFirstName()));
-        sendMessage.setReplyMarkup(keyboardService.getFirstPageKeyboardMarkup());
-        sendMessage.setChatId(message.getChatId());
-        messageEventPublisher.publish(sendMessage);
+        messageEventPublisher.publish(SendMessage.builder()
+                .text(getMessageText(message.getFrom().getFirstName()))
+                .replyMarkup(keyboardService.getFirstPageKeyboardMarkup())
+                .chatId(message.getChatId())
+                .build()
+        );
     }
 
     @Override

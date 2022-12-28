@@ -11,15 +11,13 @@ import java.util.Set;
 public class IntSubcommandArgsCreator implements SubcommandArgsCreator {
 
     @Override
-    public SubcommandArgs create(List<String> dtoArgs) {
-        return IntSubcommandArgs.builder()
-                .firstButtonIndex(Integer.parseInt(dtoArgs.get(0)))
-                .build();
+    public SubcommandArgs fromArgsList(List<String> dtoArgs) {
+        return new IntSubcommandArgs(Integer.parseInt(dtoArgs.get(0)));
     }
 
     @Override
-    public List<String> toList(SubcommandArgs subcommandArgs) {
-        return List.of(String.valueOf(((IntSubcommandArgs) subcommandArgs).firstButtonIndex()));
+    public List<String> toArgsList(SubcommandArgs subcommandArgs) {
+        return List.of(String.valueOf(((IntSubcommandArgs) subcommandArgs).i()));
     }
 
     @Override

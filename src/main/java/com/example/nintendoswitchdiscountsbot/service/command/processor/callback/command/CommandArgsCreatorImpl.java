@@ -10,14 +10,12 @@ import java.util.Set;
 public class CommandArgsCreatorImpl implements CommandArgsCreator {
 
     @Override
-    public CommandArgs create(List<String> dtoArgs) {
-        return CommandArgsImpl.builder()
-                .commandArgs(dtoArgs.get(0))
-                .build();
+    public CommandArgs fromArgsList(List<String> dtoArgs) {
+        return new CommandArgsImpl(dtoArgs.get(0));
     }
 
     @Override
-    public List<String> toList(CommandArgs commandArgs) {
+    public List<String> toArgsList(CommandArgs commandArgs) {
        return List.of(((CommandArgsImpl) commandArgs).commandArgs());
     }
 

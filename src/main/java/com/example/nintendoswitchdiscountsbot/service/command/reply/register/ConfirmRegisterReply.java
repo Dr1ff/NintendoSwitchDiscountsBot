@@ -43,7 +43,13 @@ public class ConfirmRegisterReply implements RegisterReply {
     }
 
     public String getConfirmText(CallbackData callbackData) {
-        var country = (((CountrySubcommandArgs) callbackData.subcommandArgs()).country());
+        var country = (((CountrySubcommandArgs) callbackData.subcommandArgs().orElseThrow(
+                () -> new IllegalArgumentException(
+                        "В ConfirmRegisterReply попала callbackData " +
+                                "с subcommandArgs = Optional.empty"
+                )
+        ))
+                .country());
         return String.format(
                 "Выбранный регион: %s. \nПодтвердите ваш выбор.",
                 country + EmojiManager

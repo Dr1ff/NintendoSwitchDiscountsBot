@@ -12,14 +12,12 @@ import java.util.Set;
 public class CountrySubcommandArgsCreator implements SubcommandArgsCreator {
 
     @Override
-    public SubcommandArgs create(List<String> dtoArgs) {
-        return CountrySubcommandArgs.builder()
-                .country(Country.valueOf(dtoArgs.get(0)))
-                .build();
+    public SubcommandArgs fromArgsList(List<String> dtoArgs) {
+        return new CountrySubcommandArgs(Country.valueOf(dtoArgs.get(0)));
     }
 
     @Override
-    public List<String> toList(SubcommandArgs subcommandArgs) {
+    public List<String> toArgsList(SubcommandArgs subcommandArgs) {
         return List.of(((CountrySubcommandArgs) subcommandArgs).country().name());
     }
 

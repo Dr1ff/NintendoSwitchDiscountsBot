@@ -14,7 +14,6 @@ import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageTe
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-import java.util.Locale;
 import java.util.Set;
 
 @Component
@@ -32,7 +31,12 @@ public class AcceptRegisterReply implements RegisterReply {
     ) {
         userStorageService.add(new User(
                         callbackQuery.getFrom().getId(),
-                        ((CountrySubcommandArgs) callbackData.subcommandArgs()).country().name()
+                        ((CountrySubcommandArgs) callbackData.subcommandArgs().orElseThrow(
+                                () -> new IllegalArgumentException(
+                                        "В AcceptKeyboardService попала callbackData " +
+                                                "с subcommandArgs = Optional.empty"
+                                )
+                        )).country().name()
                 )
         );
         messageEventPublisher.publish(
@@ -46,11 +50,11 @@ public class AcceptRegisterReply implements RegisterReply {
                                                 Цены на игры в боте будут указаны в валюте выбранного региона.
                                                 Вы всегда можете изменить его в меню бота.
                                                 Приступим к работе?""",
-                                        ((CountrySubcommandArgs) callbackData.subcommandArgs()).country() +
+                                        ((CountrySubcommandArgs) callbackData.subcommandArgs().get()).country() +
                                                 EmojiManager.getForAlias(
-                                                        ((CountrySubcommandArgs) callbackData.subcommandArgs())
+                                                        ((CountrySubcommandArgs) callbackData.subcommandArgs().get())
                                                                 .country().name()
-                                                                .toLowerCase(Locale.ROOT)
+                                                                .toLowerCase()
                                                 ).getUnicode()
                                 )
                         )

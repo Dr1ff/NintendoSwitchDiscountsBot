@@ -2,13 +2,13 @@ package com.example.nintendoswitchdiscountsbot.service.command.processor.callbac
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.command.CommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.command.CommandArgsCreator;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.SubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.SubcommandArgsCreator;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class CallbackParser {
@@ -34,51 +34,61 @@ public class CallbackParser {
         );
     }
 
-    public CallbackData fromDto(CallbackDto dto) {
-        var builder = new CallbackData.CallbackDataBuilder();
-        if (dto.command() != null) {
-            builder.command(dto.command());
+    public CallbackData fromDto(CallbackDto dto) {//todo: сделать что то с null
+        CommandArgs commandArgs;
+        SubcommandArgs subcommandArgs;
+        if (Objects.isNull(dto.commandArgs())) {
+            commandArgs = null;
+        } else {
+            commandArgs = commandArgsCreators.get(dto.command()).fromArgsList(dto.commandArgs());
         }
-        if (dto.commandArgs() != null) {
-            builder.commandArgs(commandArgsCreators
-                    .get(dto.command())
-                    .create(dto.commandArgs())
-            );
-        }
-        if (dto.subcommand() != null) {
-            builder.subcommand(dto.subcommand());
-        }
-        if (dto.subcommandArgs() != null) {
-            builder.subcommandArgs(subcommandArgsCreators
+        if (Objects.isNull(dto.subcommandArgs())) {
+            subcommandArgs = null;
+        } else {
+            subcommandArgs = subcommandArgsCreators
                     .get(dto.command())
                     .get(dto.subcommand())
-                    .create(dto.subcommandArgs())
-            );
+                    .fromArgsList(dto.subcommandArgs());
         }
-        return builder.build();
+        return new CallbackData(
+                dto.command(),
+                Optional.ofNullable(dto.subcommand()),
+                Optional.ofNullable(commandArgs),
+                Optional.ofNullable(subcommandArgs)
+        );
     }
 
     public CallbackDto fromData(CallbackData data) {
-        var builder = new CallbackDto.CallbackDtoBuilder();
-        if (data.command() != null) {
-            builder.command(data.command());
+
+        Subcommand subcommand;
+        List<String> commandArgs;
+        List<String> subcommandArgs;
+
+        if (data.subcommand().isEmpty()) {
+            subcommand = null;
+        } else {
+            subcommand = data.subcommand().get();
         }
-        if (data.commandArgs() != null) {
-            builder.commandArgs(commandArgsCreators
+        if (data.commandArgs().isEmpty()) {
+            commandArgs = null;
+        } else {
+            commandArgs = commandArgsCreators
                     .get(data.command())
-                    .toList(data.commandArgs())
-            );
+                    .toArgsList(data.commandArgs().get());
         }
-        if (data.subcommand() != null) {
-            builder.subcommand(data.subcommand());
-        }
-        if (data.subcommandArgs() != null) {
-            builder.subcommandArgs(subcommandArgsCreators
+        if (data.subcommandArgs().isEmpty()) {
+            subcommandArgs = null;
+        } else {
+            subcommandArgs = subcommandArgsCreators
                     .get(data.command())
-                    .get(data.subcommand())
-                    .toList(data.subcommandArgs())
-            );
+                    .get(data.subcommand().get())
+                    .toArgsList(data.subcommandArgs().get());
         }
-        return builder.build();
+        return new CallbackDto(
+                data.command(),
+                subcommand,
+                commandArgs,
+                subcommandArgs
+        );
     }
 }

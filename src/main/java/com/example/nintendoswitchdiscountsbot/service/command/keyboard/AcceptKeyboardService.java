@@ -3,8 +3,7 @@ package com.example.nintendoswitchdiscountsbot.service.command.keyboard;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackData;
-import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackDataMapper;
 import com.vdurmont.emoji.EmojiManager;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -13,14 +12,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
 public class AcceptKeyboardService implements KeyboardService {
 
-    private final ObjectMapper objectMapper;
-    private final CallbackParser callbackParser;
+    private final CallbackDataMapper callbackDataMapper;
 
     @Override
     @SneakyThrows
@@ -31,11 +30,13 @@ public class AcceptKeyboardService implements KeyboardService {
                                 InlineKeyboardButton.builder()
                                         .text("Пуск" + EmojiManager.getForAlias("rocket").getUnicode())
                                         .callbackData(
-                                                objectMapper.writeValueAsString(callbackParser.fromData(
-                                                                CallbackData.builder()
-                                                                        .command(Command.BREAK)
-                                                                        .build()
-                                                        )
+                                                callbackDataMapper.getJson(
+                                                        CallbackData.builder()
+                                                                .command(Command.BREAK)
+                                                                .commandArgs(Optional.empty())
+                                                                .subcommand(Optional.empty())
+                                                                .subcommandArgs(Optional.empty())
+                                                                .build()
                                                 )
                                         )
                                         .build()

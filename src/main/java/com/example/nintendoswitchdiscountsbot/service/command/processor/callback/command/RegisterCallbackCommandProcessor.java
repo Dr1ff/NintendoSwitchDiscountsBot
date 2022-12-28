@@ -25,7 +25,12 @@ public class RegisterCallbackCommandProcessor implements CallbackCommandProcesso
     }
 
     public void process(CallbackQuery callbackQuery, CallbackData callbackData) {
-         processors.get(callbackData.subcommand()).process(callbackQuery, callbackData);
+         processors.get(
+                 callbackData.subcommand().orElseThrow(() -> new IllegalArgumentException(
+                         "RegisterCallbackCommandProcessor получил callbackData" +
+                                 "с subcommand = Optional.empty"
+                 ))
+         ).process(callbackQuery, callbackData);
     }
 
     public Command getCommand() {

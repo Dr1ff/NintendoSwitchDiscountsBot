@@ -3,10 +3,10 @@ package com.example.nintendoswitchdiscountsbot.service.command.keyboard;
 import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackData;
-import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackParser;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackDataMapper;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.CountrySubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.IntSubcommandArgs;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.SubcommandArgs;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -22,8 +23,7 @@ public class ConfirmKeyboardService implements KeyboardService {
 
     private final static int NUMBER_OF_BUTTONS = 9;
 
-    private final ObjectMapper objectMapper;
-    private final CallbackParser callbackParser;
+    private final CallbackDataMapper callbackDataMapper;
 
     @Override
     public InlineKeyboardMarkup getMarkup(CallbackData callbackData) {
@@ -45,17 +45,18 @@ public class ConfirmKeyboardService implements KeyboardService {
     private InlineKeyboardButton getCancelButton(CallbackData callbackData) {
         return InlineKeyboardButton.builder()
                 .text(Subcommand.CANCEL.getButtonText())
-                .callbackData(objectMapper.writeValueAsString(callbackParser.fromData(callbackData.toBuilder()
-                                        .subcommand(Subcommand.CANCEL)
-                                        .subcommandArgs(getCancelArgs(
-                                                        ((CountrySubcommandArgs) callbackData.subcommandArgs())
-                                                                .country()
-                                                )
-                                        )
-                                        .build()
-                                )
-                        )
-                )
+                .callbackData(callbackDataMapper.getJson(
+                        callbackData.toBuilder()
+                                .subcommand(Optional.of(Subcommand.CANCEL))
+                                .subcommandArgs(getCancelArgs(
+                                        ((CountrySubcommandArgs) callbackData.subcommandArgs().orElseThrow(
+                                                () -> new IllegalArgumentException(
+                                                        "В ConfirmKeyboardService попала callbackData " +
+                                                                "с subcommandArgs = Optional.empty")
+                                        )).country()
+                                ))
+                                .build()
+                ))
                 .build();
     }
 
@@ -63,30 +64,28 @@ public class ConfirmKeyboardService implements KeyboardService {
     private InlineKeyboardButton getAcceptButton(CallbackData callbackData) {
         return InlineKeyboardButton.builder()
                 .text(Subcommand.ACCEPT.getButtonText())
-                .callbackData(objectMapper.writeValueAsString(callbackParser.fromData(callbackData.toBuilder()
-                                        .subcommand(Subcommand.ACCEPT)
-                                        .subcommandArgs(getAcceptArgs(
-                                                        ((CountrySubcommandArgs) callbackData.subcommandArgs())
-                                                                .country()
+                .callbackData(callbackDataMapper.getJson(
+                        callbackData.toBuilder()
+                                .subcommand(Optional.of(Subcommand.ACCEPT))
+                                .subcommandArgs(getAcceptArgs(
+                                        ((CountrySubcommandArgs) callbackData.subcommandArgs().orElseThrow(
+                                                () -> new IllegalArgumentException(
+                                                        "В ConfirmKeyboardService попала callbackData " +
+                                                                "с subcommandArgs = Optional.empty"
                                                 )
-                                        )
-                                        .build()
-                                )
-                        )
-
-                )
+                                        )).country()
+                                ))
+                                .build()
+                ))
                 .build();
     }
 
-    private IntSubcommandArgs getCancelArgs(Country country) {
-        return IntSubcommandArgs.builder()
-                .firstButtonIndex(((country.ordinal()) / NUMBER_OF_BUTTONS) * NUMBER_OF_BUTTONS)
-                .build();
+    private Optional<SubcommandArgs> getCancelArgs(Country country) {
+        return Optional.of(
+                new IntSubcommandArgs(((country.ordinal()) / NUMBER_OF_BUTTONS) * NUMBER_OF_BUTTONS));
     }
 
-    private CountrySubcommandArgs getAcceptArgs(Country country) {
-        return CountrySubcommandArgs.builder()
-                .country(country)
-                .build();
+    private Optional<SubcommandArgs> getAcceptArgs(Country country) {
+        return Optional.of(new CountrySubcommandArgs(country));
     }
 }

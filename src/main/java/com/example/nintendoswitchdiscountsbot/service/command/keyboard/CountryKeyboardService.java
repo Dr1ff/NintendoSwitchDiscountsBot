@@ -4,10 +4,9 @@ import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackData;
-import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackParser;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackDataMapper;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.CountrySubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand.IntSubcommandArgs;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vdurmont.emoji.EmojiManager;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.SneakyThrows;
@@ -25,13 +24,11 @@ public class CountryKeyboardService implements KeyboardService {
     private final static int NUMBER_OF_ROWS = 3;
     private final static int ARROWS_ROW_INDEX = 3;
 
-    private final CallbackParser callbackParser;
-    private final ObjectMapper objectMapper;
+    private final CallbackDataMapper callbackDataMapper;
     private final List<InlineKeyboardButton> countryButtons;
 
-    public CountryKeyboardService(ObjectMapper objectMapper, CallbackParser callbackParser) {
-        this.objectMapper = objectMapper;
-        this.callbackParser = callbackParser;
+    public CountryKeyboardService(CallbackDataMapper callbackDataMapper) {
+        this.callbackDataMapper = callbackDataMapper;
         this.countryButtons = Arrays.stream(Country.values())
                 .map(this::getCountryButton)
                 .toList();
@@ -49,21 +46,25 @@ public class CountryKeyboardService implements KeyboardService {
     @Override
     public InlineKeyboardMarkup getMarkup(CallbackData callbackData) {
         var rows = getRows();
-        int firstButtonIndex = (((IntSubcommandArgs) callbackData.subcommandArgs()).firstButtonIndex());
+        int firstButtonIndex = (
+                ((IntSubcommandArgs) callbackData
+                        .subcommandArgs()
+                        .orElseThrow(() -> new IllegalArgumentException(
+                                        "В CountryKeyboardService попала callbackData " +
+                                                "с subcommandArgs = Optional.empty"
+                                )
+                        )).i()
+        );
         int nextKeyboardFirstButtonIndex = getNextKeyboardFirstIndex(firstButtonIndex);
         int prevKeyboardFirstButtonIndex = getPrevKeyboardFirstIndex(firstButtonIndex);
 
         if (isFirstPage(firstButtonIndex)) {
-            rows.get(ARROWS_ROW_INDEX).add(getEmptyButton());
+            rows.get(ARROWS_ROW_INDEX).add(EmptyButtonUtil.get());
         } else {
             rows.get(ARROWS_ROW_INDEX).add(getButton(
                             callbackData.toBuilder()
-                                    .subcommand(Subcommand.PREV)
-                                    .subcommandArgs(
-                                            IntSubcommandArgs.builder()
-                                                    .firstButtonIndex(prevKeyboardFirstButtonIndex)
-                                                    .build()
-                                    )
+                                    .subcommand(Optional.of(Subcommand.PREV))
+                                    .subcommandArgs(Optional.of(new IntSubcommandArgs(prevKeyboardFirstButtonIndex)))
                                     .build()
                     )
             );
@@ -71,16 +72,12 @@ public class CountryKeyboardService implements KeyboardService {
 
         if (isLastPage(nextKeyboardFirstButtonIndex)) {
             nextKeyboardFirstButtonIndex = countryButtons.size();
-            rows.get(ARROWS_ROW_INDEX).add(getEmptyButton());
+            rows.get(ARROWS_ROW_INDEX).add(EmptyButtonUtil.get());
         } else {
             rows.get(ARROWS_ROW_INDEX).add(getButton(
                             callbackData.toBuilder()
-                                    .subcommand(Subcommand.NEXT)
-                                    .subcommandArgs(
-                                            IntSubcommandArgs.builder()
-                                                    .firstButtonIndex(nextKeyboardFirstButtonIndex)
-                                                    .build()
-                                    )
+                                    .subcommand(Optional.of(Subcommand.NEXT))
+                                    .subcommandArgs(Optional.of(new IntSubcommandArgs(nextKeyboardFirstButtonIndex)))
                                     .build()
                     )
             );
@@ -99,21 +96,19 @@ public class CountryKeyboardService implements KeyboardService {
     public InlineKeyboardMarkup getFirstPageKeyboardMarkup() {
         return getMarkup(CallbackData.builder()
                 .command(Command.REGISTER)
-                .subcommandArgs(IntSubcommandArgs.builder()
-                        .firstButtonIndex(0)
-                        .build()
-                )
+                .commandArgs(Optional.empty())
+                .subcommand(Optional.empty())
+                .subcommandArgs(Optional.of(new IntSubcommandArgs(0)))
                 .build()
         );
     }
 
     private List<List<InlineKeyboardButton>> getRows() {
-        return List.of(
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>(),
-                new ArrayList<>()
-        );
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            rows.add(new ArrayList<>());
+        }
+        return rows;
     }
 
     private int getNextKeyboardFirstIndex(int index) {
@@ -135,31 +130,24 @@ public class CountryKeyboardService implements KeyboardService {
     @SneakyThrows
     private InlineKeyboardButton getButton(CallbackData callbackData) {
         return InlineKeyboardButton.builder()
-                .text(callbackData.subcommand().getButtonText())
-                .callbackData(
-                        objectMapper.writeValueAsString(
-                                callbackParser.fromData(callbackData)
-                        )
-                )
-                .build();
-    }
-
-    @SneakyThrows
-    private InlineKeyboardButton getEmptyButton() {
-        return InlineKeyboardButton.builder()
-                .text(" ")
-                .callbackData(
-                        objectMapper.writeValueAsString(callbackParser.fromData(
-                                        CallbackData.builder()
-                                                .command(Command.BREAK)
-                                                .build()
+                .text(
+                        callbackData
+                                .subcommand()
+                                .orElseThrow(() -> new IllegalArgumentException(
+                                                "В CountryKeyboardService попала callbackData " +
+                                                        "с subcommandArgs = Optional.empty"
+                                        )
                                 )
-                        )
+                                .getButtonText()
                 )
+                .callbackData(callbackDataMapper.getJson(callbackData))
                 .build();
     }
 
-    private void assembleRows(List<List<InlineKeyboardButton>> rows, Iterator<InlineKeyboardButton> buttonIterator) {
+    private void assembleRows(
+            List<List<InlineKeyboardButton>> rows,
+            Iterator<InlineKeyboardButton> buttonIterator
+    ) {
         for (int i = 0; i < NUMBER_OF_ROWS; i++) {
             assembleRow(rows.get(i), buttonIterator);
         }
@@ -177,20 +165,15 @@ public class CountryKeyboardService implements KeyboardService {
     @SneakyThrows
     private InlineKeyboardButton getCountryButton(Country country) {
         return InlineKeyboardButton.builder()
-                .text( /* Страна и ее флаг(emoji) */
-                        EmojiParser.parseToUnicode(country.name())
-                                + EmojiManager.getForAlias(country.name().toLowerCase(Locale.ROOT)).getUnicode())
-                .callbackData(objectMapper.writeValueAsString(callbackParser.fromData(
-                                        CallbackData.builder()
-                                                .command(Command.REGISTER)
-                                                .subcommand(Subcommand.CONFIRM)
-                                                .subcommandArgs(
-                                                        CountrySubcommandArgs.builder()
-                                                                .country(country)
-                                                                .build()
-                                                )
-                                                .build()
-                                )
+                .text(EmojiParser.parseToUnicode(country.name())
+                        + EmojiManager.getForAlias(country.name().toLowerCase()).getUnicode())
+                .callbackData(callbackDataMapper.getJson(
+                                CallbackData.builder()
+                                        .command(Command.REGISTER)
+                                        .commandArgs(Optional.empty())
+                                        .subcommand(Optional.of(Subcommand.CONFIRM))
+                                        .subcommandArgs(Optional.of(new CountrySubcommandArgs(country)))
+                                        .build()
                         )
                 )
                 .build();

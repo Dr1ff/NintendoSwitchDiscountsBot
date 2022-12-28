@@ -1,10 +1,9 @@
 package com.example.nintendoswitchdiscountsbot.service.command.processor.callback.subcommand;
 
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackData;
-import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackDto;
-import com.example.nintendoswitchdiscountsbot.service.command.reply.RegisterReply;
 import com.example.nintendoswitchdiscountsbot.service.command.keyboard.KeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.command.processor.callback.CallbackData;
+import com.example.nintendoswitchdiscountsbot.service.command.reply.RegisterReply;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -37,8 +36,19 @@ public class RegisterCallbackSubcommandProcessor implements CallbackSubcommandPr
     @Override
     public void process(CallbackQuery callbackQuery, CallbackData callbackData) {
         replyBuilders.get(
-                callbackData.subcommand()).reply(callbackQuery, callbackData,
-                keyboardServices.get(callbackData.subcommand()).getMarkup(callbackData));
+                        callbackData.subcommand().orElseThrow(
+                                () -> new IllegalArgumentException(
+                                        "В RegisterCallbackSubcommandProcessor попала callbackData " +
+                                                "с subcommand = Optional.empty"
+                                )
+                        )
+                )
+                .reply(
+                        callbackQuery,
+                        callbackData,
+                        keyboardServices.get(callbackData.subcommand().get())
+                                .getMarkup(callbackData)
+                );
     }
 
     @Override
