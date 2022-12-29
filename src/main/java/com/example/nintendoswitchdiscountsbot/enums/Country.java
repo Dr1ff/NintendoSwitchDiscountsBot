@@ -1,8 +1,11 @@
 package com.example.nintendoswitchdiscountsbot.enums;
 
+import lombok.Getter;
+
 /**
  * @author Alexander Popov
  */
+@Getter
 public enum Country {
     AT("EUR", "€"),
     AU("AUD", "$"),
@@ -43,6 +46,10 @@ public enum Country {
     US("USD", "$"),
     ZA("ZAR", "R");
 
+    private final String currency;
+    private final String sign;
     Country(String currency, String sign) {
+        this.currency = currency;
+        this.sign = sign;
     }
 }

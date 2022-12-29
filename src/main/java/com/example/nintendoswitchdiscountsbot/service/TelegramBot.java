@@ -2,7 +2,7 @@ package com.example.nintendoswitchdiscountsbot.service;
 
 
 import com.example.nintendoswitchdiscountsbot.config.BotConfig;
-import com.example.nintendoswitchdiscountsbot.parser.GamesImportTask;
+import com.example.nintendoswitchdiscountsbot.service.update.handler.UpdateHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig config;
-    private final GamesImportTask gamesImportTask;
+    private final UpdateHandler processor;
 
     @Override
     public String getBotUsername() {
@@ -29,7 +29,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        gamesImportTask.execute();
+        processor.processing(update);
     }
 }
 

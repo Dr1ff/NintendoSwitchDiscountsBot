@@ -24,6 +24,6 @@ public class UserEntity {
     private Long wishlist;
 
     @Column(name = "country", nullable = false)
-    private String country;
+    private String country; //todo: вкрутить тип Country
 
 }

@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class User {
+public class User { // Можно все таки сделать рекордом с билдером
+
     private final Long id;
     private Long wishlist;
     private final String country;

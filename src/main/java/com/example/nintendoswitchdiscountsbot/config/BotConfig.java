@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "telegram-bot")
 public class BotConfig {
+
     private String username;
     private String token;
 }
