@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig config;
-    private final UpdateHandler processor;
+    private final UpdateHandler updateHandler;
 
     @Override
     public String getBotUsername() {
@@ -29,7 +29,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        processor.processing(update);
+        updateHandler.handle(update);
     }
 }
 

@@ -38,7 +38,7 @@ public class UpdateHandler {
     }
 
     @SneakyThrows
-    public void processing(Update update) {
+    public void handle(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText().trim().replace("/", "").toUpperCase();
             Optional<Command> commandO = Optional.of(Command.valueOf(messageText));
