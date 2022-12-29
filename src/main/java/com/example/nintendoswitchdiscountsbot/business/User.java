@@ -12,4 +12,5 @@ public class User { // Можно все таки сделать рекордо�
     private final Long id;
     private Long wishlist;
     private final String country;
+
 }
