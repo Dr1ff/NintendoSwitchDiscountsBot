@@ -1,9 +1,9 @@
 package com.example.nintendoswitchdiscountsbot.service.update.reply.register;
 
-import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
-import com.example.nintendoswitchdiscountsbot.service.update.reply.RegisterReply;
+import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.observer.MessageEventPublisher;
+import com.example.nintendoswitchdiscountsbot.service.update.reply.RegisterReply;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
