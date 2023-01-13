@@ -22,7 +22,7 @@ public class GamesImportTask {
     private final GameMapper gameMapper;
     private final GameParser gameParser;
 
-    @Scheduled(cron = "@daily")
+    @Scheduled(cron = "${daily-tasks.start-time.games-import}")
     public void execute() {
         for (var country : Country.values()) {
             Document rawGamesList;
