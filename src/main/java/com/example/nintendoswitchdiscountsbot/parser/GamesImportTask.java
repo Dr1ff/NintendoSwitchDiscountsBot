@@ -6,6 +6,7 @@ import com.example.nintendoswitchdiscountsbot.service.storage.GameStorageService
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,6 +22,7 @@ public class GamesImportTask {
     private final GameMapper gameMapper;
     private final GameParser gameParser;
 
+    @Scheduled(cron = "@daily")
     public void execute() {
         for (var country : Country.values()) {
             Document rawGamesList;
