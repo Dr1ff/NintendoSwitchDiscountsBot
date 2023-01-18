@@ -26,6 +26,6 @@ CREATE TABLE notification (
 
 CREATE TABLE "user" (
                         id BIGINT PRIMARY KEY ,
-                        country VARCHAR(255),
-                        wishlist BIGINT
+                        country TEXT NOT NULL,
+                        wishlist JSONB
 );

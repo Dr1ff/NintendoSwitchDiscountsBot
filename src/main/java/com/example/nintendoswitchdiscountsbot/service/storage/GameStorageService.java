@@ -1,20 +1,21 @@
 package com.example.nintendoswitchdiscountsbot.service.storage;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.example.nintendoswitchdiscountsbot.business.Game;
 import com.example.nintendoswitchdiscountsbot.entity.GameEntity;
+import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.repository.GameRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class GameStorageService {
     private final GameRepository repository;
 
-    public Optional<Game> findById(Long id) {
+    public Optional<Game> findById(GameEntity.Id id) {
         var gameEntityO = repository.findById(id);
         if (gameEntityO.isEmpty()) {
             return Optional.empty();
@@ -33,6 +34,19 @@ public class GameStorageService {
 
     public void addBatch(List<Game> games) {
         repository.saveAll(games.stream().map(this::toEntity).toList());
+    }
+
+    public List<Game> findAllByNameAndCountry(String name, Country country) {
+        var entityList = repository
+                .findAllByIdNameContainingIgnoreCaseAndIdCountryContaining(name, country);
+        if (entityList.isEmpty()) {
+            return List.of();
+        } else {
+            return entityList
+                    .stream()
+                    .map(this::fromEntity)
+                    .toList();
+        }
     }
 
     private GameEntity toEntity(Game game) {

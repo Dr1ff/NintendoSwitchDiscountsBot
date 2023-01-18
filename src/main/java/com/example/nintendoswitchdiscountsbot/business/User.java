@@ -1,16 +1,15 @@
 package com.example.nintendoswitchdiscountsbot.business;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import com.example.nintendoswitchdiscountsbot.enums.Country;
+import lombok.Builder;
 
-@Data
-@AllArgsConstructor
-@RequiredArgsConstructor
-public class User { // Можно все таки сделать рекордом с билдером
+import java.util.List;
 
-    private final Long id;
-    private Long wishlist;
-    private final String country;
-
+public record User(
+        Long id,
+        List<Game> wishlist,
+        Country country
+) {
+    @Builder(toBuilder = true)
+    public User {}
 }

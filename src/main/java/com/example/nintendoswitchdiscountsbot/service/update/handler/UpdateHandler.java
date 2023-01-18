@@ -1,11 +1,9 @@
 package com.example.nintendoswitchdiscountsbot.service.update.handler;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
-import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.data.CallbackDataMapper;
-import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.data.CallbackParser;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.command.CallbackCommandProcessor;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.data.CallbackDataMapper;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.message.MessageCommandProcessor;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -26,8 +24,7 @@ public class UpdateHandler {
     public UpdateHandler(
             List<MessageCommandProcessor> commandProcessors,
             List<CallbackCommandProcessor> callbackProcessors,
-            ObjectMapper objectMapper,
-            CallbackParser callbackParser, CallbackDataMapper callbackDataMapper) {
+            CallbackDataMapper callbackDataMapper) {
         this.callbackProcessors = callbackProcessors
                 .stream()
                 .collect(Collectors.toMap(CallbackCommandProcessor::getCommand, Function.identity()));
