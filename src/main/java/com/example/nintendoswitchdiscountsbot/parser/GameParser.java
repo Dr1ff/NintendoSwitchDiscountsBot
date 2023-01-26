@@ -1,10 +1,5 @@
 package com.example.nintendoswitchdiscountsbot.parser;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import com.example.nintendoswitchdiscountsbot.dto.GameDto;
 import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -25,7 +25,9 @@ public class GameParser {
     private final GameFieldResolver gameFieldResolver;
 
     public List<GameDto> parse(Document gamesListPage, Country country) {
-        var gamesDetails = gamesListPage.getElementsByAttributeValueEnding("class", "game-collection-item-details");
+        var gamesDetails = gamesListPage.getElementsByAttributeValueEnding(
+                "class", "game-collection-item-details"
+        );
         return gamesDetails.stream()
                 .map(e -> tryParseGameDetailsToJson(e, country))
                 .filter(Optional::isPresent)

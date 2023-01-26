@@ -33,11 +33,15 @@ public class GameEntity {
     @Column(name = "is_discount", nullable = false)
     private boolean isDiscount;
 
+    @Column(name = "name_hash")
+    private Integer nameHash;
+
     @Getter
     @Embeddable
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Id implements Serializable {
+
         @Column(name = "name", nullable = false)
         private String name;
 
@@ -45,4 +49,5 @@ public class GameEntity {
         @Column(name = "country", nullable = false)
         private Country country;
     }
+
 }

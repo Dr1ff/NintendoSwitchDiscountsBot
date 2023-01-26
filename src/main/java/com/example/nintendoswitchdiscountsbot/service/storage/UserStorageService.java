@@ -1,5 +1,6 @@
 package com.example.nintendoswitchdiscountsbot.service.storage;
 
+import com.example.nintendoswitchdiscountsbot.business.Game;
 import com.example.nintendoswitchdiscountsbot.business.User;
 import com.example.nintendoswitchdiscountsbot.entity.GameEntity;
 import com.example.nintendoswitchdiscountsbot.entity.UserEntity;
@@ -7,6 +8,8 @@ import com.example.nintendoswitchdiscountsbot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +36,22 @@ public class UserStorageService {
         repository.delete(toEntity(user));
     }
 
+    public void addGame(Long userId, Game game) {
+        var UserO = findById(userId);
+        List<Game> games = new ArrayList<>();
+        UserO.ifPresent(user -> {
+            games.addAll(user.wishlist());
+            if (!games.contains(game)) {
+                games.add(game);
+            }
+            add(user.toBuilder()
+                    .wishlist(games)
+                    .build());
+        });
+
+
+    }
+
     private User fromEntity(UserEntity entity) {
         return new User(
                 entity.getId(),
@@ -42,7 +61,8 @@ public class UserStorageService {
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .toList(),
-                entity.getCountry()
+                entity.getCountry(),
+                entity.getState()
         );
     }
 
@@ -53,7 +73,8 @@ public class UserStorageService {
                         .stream()
                         .map(game -> new GameEntity.Id(game.name(), game.country()))
                         .toList(),
-                user.country()
+                user.country(),
+                user.state()
         );
     }
 }

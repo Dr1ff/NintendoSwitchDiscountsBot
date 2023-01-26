@@ -1,14 +1,14 @@
 package com.example.nintendoswitchdiscountsbot.parser;
 
-import java.math.BigDecimal;
-import java.util.Optional;
-
 import com.example.nintendoswitchdiscountsbot.business.Game;
 import com.example.nintendoswitchdiscountsbot.dto.GameDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -34,7 +34,8 @@ public class GameMapper {
                 dto.priceWithoutDiscount().map(BigDecimal::valueOf),
                 dto.discountPercent(),
                 dto.priceValidUntil(),
-                dto.priceWithoutDiscount().isPresent()
+                dto.priceWithoutDiscount().isPresent(),
+                dto.name().hashCode()
         );
     }
 }

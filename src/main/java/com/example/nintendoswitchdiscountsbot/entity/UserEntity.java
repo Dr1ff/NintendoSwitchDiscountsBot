@@ -1,5 +1,6 @@
 package com.example.nintendoswitchdiscountsbot.entity;
 
+import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Country;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import lombok.AllArgsConstructor;
@@ -30,5 +31,9 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "country", nullable = false)
     private Country country;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state")
+    private Command state;
 
 }
