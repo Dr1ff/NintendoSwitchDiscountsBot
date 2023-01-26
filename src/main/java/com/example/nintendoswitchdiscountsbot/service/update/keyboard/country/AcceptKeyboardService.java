@@ -1,8 +1,10 @@
-package com.example.nintendoswitchdiscountsbot.service.update.keyboard;
+package com.example.nintendoswitchdiscountsbot.service.update.keyboard.country;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
+import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardHelper;
+import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
 import com.vdurmont.emoji.EmojiManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -25,9 +27,9 @@ public class AcceptKeyboardService implements KeyboardService {
                         List.of(keyboardHelper.getButton(
                                         "Пуск" + EmojiManager.getForAlias("rocket").getUnicode(),
                                         CallbackData.builder()
-                                                .command(Command.BREAK)
+                                                .command(Command.MENU)
                                                 .commandArgs(Optional.empty())
-                                                .subcommand(Optional.empty())
+                                                .subcommand(Optional.of(Subcommand.ACCEPT))
                                                 .subcommandArgs(Optional.empty())
                                                 .build()
                                 )
@@ -37,7 +39,14 @@ public class AcceptKeyboardService implements KeyboardService {
     }
 
     @Override
-    public Set<Subcommand> getSubcommand() {
+    public Set<Subcommand> getSubcommands() {
         return Set.of(Subcommand.ACCEPT);
+    }
+
+    @Override
+    public Set<Command> getCommands() {
+        return Set.of(
+                Command.REGISTER
+        );
     }
 }

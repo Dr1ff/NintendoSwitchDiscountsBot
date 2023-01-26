@@ -2,10 +2,10 @@ package com.example.nintendoswitchdiscountsbot.service.update.processor.callback
 
 import lombok.Builder;
 
-public record CommandArgsImpl(
-        String commandArgs
+public record StringCommandArgs(
+        String string
 ) implements CommandArgs {
     @Builder
-    public CommandArgsImpl {
+    public StringCommandArgs {
     }
 }

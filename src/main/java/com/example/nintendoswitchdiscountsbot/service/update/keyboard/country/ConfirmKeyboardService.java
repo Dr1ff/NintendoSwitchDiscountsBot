@@ -1,10 +1,13 @@
-package com.example.nintendoswitchdiscountsbot.service.update.keyboard;
+package com.example.nintendoswitchdiscountsbot.service.update.keyboard.country;
 
+import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
-import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.CountrySubcommandArgs;
-import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.IntSubcommandArgs;
+import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardHelper;
+import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.country.CountrySubcommandArgs;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.number.NumSubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.SubcommandArgs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -35,8 +38,15 @@ public class ConfirmKeyboardService implements KeyboardService {
     }
 
     @Override
-    public Set<Subcommand> getSubcommand() {
+    public Set<Subcommand> getSubcommands() {
         return Set.of(Subcommand.CONFIRM);
+    }
+
+    @Override
+    public Set<Command> getCommands() {
+        return Set.of(
+                Command.REGISTER
+        );
     }
 
     private InlineKeyboardButton getCancelButton(CallbackData callbackData) {
@@ -68,7 +78,7 @@ public class ConfirmKeyboardService implements KeyboardService {
 
     private Optional<SubcommandArgs> getCancelArgs(Country country) {
         return Optional.of(
-                new IntSubcommandArgs(((country.ordinal()) / NUMBER_OF_BUTTONS) * NUMBER_OF_BUTTONS)
+                new NumSubcommandArgs(((country.ordinal()) / NUMBER_OF_BUTTONS) * NUMBER_OF_BUTTONS)
         );
     }
 

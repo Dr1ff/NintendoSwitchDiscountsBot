@@ -6,5 +6,11 @@ import lombok.Getter;
 public enum Command {
     START,
     REGISTER,
+    MENU,
+    ADD_GAME,
+    WISHLIST,
+    REMOVE_GAME,
+    REGION,
+    NOTIFICATION,
     BREAK
 }

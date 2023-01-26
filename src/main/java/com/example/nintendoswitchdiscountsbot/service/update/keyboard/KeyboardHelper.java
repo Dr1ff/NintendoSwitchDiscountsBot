@@ -57,6 +57,19 @@ public class KeyboardHelper {
                 .build();
     }
 
+    @SneakyThrows
+    public InlineKeyboardButton getButton(
+            String text,
+            String url,
+            CallbackData callbackData
+    ) {
+        return InlineKeyboardButton.builder()
+                .text(text)
+                .url(url)
+                .callbackData(callbackDataMapper.getJson(callbackData))
+                .build();
+    }
+
     public List<List<InlineKeyboardButton>> getRows(int numberOfRows) {
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         for (int i = 0; i < numberOfRows; i++) {

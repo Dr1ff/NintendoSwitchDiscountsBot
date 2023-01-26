@@ -1,9 +1,10 @@
 package com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand;
 
+import com.example.nintendoswitchdiscountsbot.business.CallbackData;
+import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
-import com.example.nintendoswitchdiscountsbot.business.CallbackData;
-import com.example.nintendoswitchdiscountsbot.service.update.reply.RegisterReply;
+import com.example.nintendoswitchdiscountsbot.service.update.reply.register.RegisterMessenger;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -16,26 +17,32 @@ import java.util.Set;
 public class RegisterCallbackSubcommandProcessor implements CallbackSubcommandProcessor {
 
     private final Map<Subcommand, KeyboardService> keyboardServices;
-    private final Map<Subcommand, RegisterReply> replyBuilders;
+    private final Map<Subcommand, RegisterMessenger> replyMap;
 
     public RegisterCallbackSubcommandProcessor(
             List<KeyboardService> keyboardServices,
-            List<RegisterReply> replyBuilders
+            List<RegisterMessenger> replies
     ) {
         Map<Subcommand, KeyboardService> keyboardServiceMap = new HashMap<>();
-        keyboardServices.forEach(keyboardService -> keyboardService.getSubcommand()
-                .forEach(subcommand -> keyboardServiceMap.put(subcommand, keyboardService))
-        );
-        Map<Subcommand, RegisterReply> replyBuilderMap = new HashMap<>();
-        replyBuilders.forEach(replyBuilder -> replyBuilder.getSubcommand()
-                .forEach(subcommand -> replyBuilderMap.put(subcommand, replyBuilder)));
+        keyboardServices
+                .stream()
+                .filter(service -> service.getCommands().contains(getCommand()))
+                .forEach(keyboardService ->
+                        keyboardService.getSubcommands()
+                                .forEach(subcommand ->
+                                        keyboardServiceMap.put(subcommand, keyboardService)));
+
+        Map<Subcommand, RegisterMessenger> repliesMap = new HashMap<>();
+        replies
+                .forEach(reply -> reply.getSubcommand()
+                        .forEach(subcommand -> repliesMap.put(subcommand, reply)));
         this.keyboardServices = keyboardServiceMap;
-        this.replyBuilders = replyBuilderMap;
+        this.replyMap = repliesMap;
     }
 
     @Override
     public void process(CallbackQuery callbackQuery, CallbackData callbackData) {
-        replyBuilders.get(
+        replyMap.get(
                         callbackData.subcommand().orElseThrow(
                                 () -> new IllegalArgumentException(
                                         "В RegisterCallbackSubcommandProcessor попала callbackData " +
@@ -60,5 +67,10 @@ public class RegisterCallbackSubcommandProcessor implements CallbackSubcommandPr
                 Subcommand.CANCEL,
                 Subcommand.ACCEPT
         );
+    }
+
+    @Override
+    public Command getCommand() {
+        return Command.REGISTER;
     }
 }
