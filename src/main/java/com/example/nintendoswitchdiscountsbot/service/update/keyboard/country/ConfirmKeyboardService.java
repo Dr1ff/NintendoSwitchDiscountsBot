@@ -4,10 +4,10 @@ import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardHelper;
+import com.example.nintendoswitchdiscountsbot.utils.KeyboardHelper;
 import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.country.CountrySubcommandArgs;
-import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.number.NumSubcommandArgs;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.SubcommandArgs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -78,7 +78,7 @@ public class ConfirmKeyboardService implements KeyboardService {
 
     private Optional<SubcommandArgs> getCancelArgs(Country country) {
         return Optional.of(
-                new NumSubcommandArgs(((country.ordinal()) / NUMBER_OF_BUTTONS) * NUMBER_OF_BUTTONS)
+                new IntegerSubcommandArgs(((country.ordinal()) / NUMBER_OF_BUTTONS) * NUMBER_OF_BUTTONS)
         );
     }
 

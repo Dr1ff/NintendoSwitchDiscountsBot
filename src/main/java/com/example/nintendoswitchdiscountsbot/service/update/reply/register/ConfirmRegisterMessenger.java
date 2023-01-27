@@ -1,20 +1,22 @@
 package com.example.nintendoswitchdiscountsbot.service.update.reply.register;
 
-import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
+import com.example.nintendoswitchdiscountsbot.business.CallbackData;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.country.CountrySubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.observer.MessageEventPublisher;
-import com.example.nintendoswitchdiscountsbot.service.update.reply.RegisterReply;
+import com.vdurmont.emoji.EmojiManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
+import java.util.Locale;
 import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class CancelRegisterReply implements RegisterReply {
+public class ConfirmRegisterMessenger extends RegisterMessenger {
 
     private final MessageEventPublisher messageEventPublisher;
 
@@ -28,7 +30,7 @@ public class CancelRegisterReply implements RegisterReply {
                 EditMessageText.builder()
                         .messageId(callbackQuery.getMessage().getMessageId())
                         .chatId(callbackQuery.getMessage().getChatId())
-                        .text("Для начала работы бота, выберите регион:")
+                        .text(getConfirmText(callbackData))
                         .replyMarkup(replyMarkup)
                         .build()
         );
@@ -36,6 +38,22 @@ public class CancelRegisterReply implements RegisterReply {
 
     @Override
     public Set<Subcommand> getSubcommand() {
-        return Set.of(Subcommand.CANCEL);
+        return Set.of(Subcommand.CONFIRM);
+    }
+
+    public String getConfirmText(CallbackData callbackData) {
+        var country = (((CountrySubcommandArgs) callbackData.subcommandArgs().orElseThrow(
+                () -> new IllegalArgumentException(
+                        "В ConfirmRegisterReply попала callbackData " +
+                                "с subcommandArgs = Optional.empty"
+                )
+        ))
+                .country());
+        return String.format(
+                "Выбранный регион: %s. \nПодтвердите ваш выбор.",
+                country + EmojiManager
+                        .getForAlias(country.name().toLowerCase(Locale.ROOT))
+                        .getUnicode()
+        );
     }
 }

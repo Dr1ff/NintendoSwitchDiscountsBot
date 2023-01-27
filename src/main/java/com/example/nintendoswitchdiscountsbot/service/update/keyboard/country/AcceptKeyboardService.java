@@ -3,7 +3,7 @@ package com.example.nintendoswitchdiscountsbot.service.update.keyboard.country;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardHelper;
+import com.example.nintendoswitchdiscountsbot.utils.KeyboardHelper;
 import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
 import com.vdurmont.emoji.EmojiManager;
 import lombok.RequiredArgsConstructor;

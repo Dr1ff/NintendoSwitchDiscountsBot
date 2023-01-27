@@ -1,7 +1,7 @@
-package com.example.nintendoswitchdiscountsbot.service.update.keyboard;
+package com.example.nintendoswitchdiscountsbot.utils;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
-import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.number.NumSubcommandArgs;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -25,12 +25,12 @@ public class PaginationKeyboardUtil {
 
     public int firstButtonIndex(CallbackData callbackData) {
         return (
-                ((NumSubcommandArgs) callbackData
+                ((IntegerSubcommandArgs) callbackData
                         .subcommandArgs()
                         .orElseThrow(() -> new IllegalArgumentException(
                                         "callbackData с subcommandArgs = Optional.empty"
                                 )
-                        )).num()
+                        )).integer()
         );
     }
 }

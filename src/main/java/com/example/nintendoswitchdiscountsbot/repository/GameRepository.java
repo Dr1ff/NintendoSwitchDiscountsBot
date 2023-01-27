@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface GameRepository extends JpaRepository<GameEntity, GameEntity.Id> {
 
-    List<GameEntity> findAllByIdNameContainingIgnoreCaseAndIdCountry (String name, Country country);
+    List<GameEntity> findById_NameContainsIgnoreCaseAndId_Country(String name, Country country);
 
-    Optional<GameEntity> findByNameHash(Integer nameHash);
+    Optional<GameEntity> findByNameHashAndId_Country(Integer nameHash, Country country);
 }

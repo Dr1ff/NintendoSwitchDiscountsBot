@@ -1,8 +1,10 @@
-package com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args;
+package com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.country;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.SubcommandArgs;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.SubcommandArgsCreator;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,8 +29,8 @@ public class CountrySubcommandArgsCreator implements SubcommandArgsCreator {
     }
 
     @Override
-    public Command getCommand() {
-        return Command.REGISTER;
+    public Set<Command> getCommands() {
+        return Set.of(Command.REGISTER);
     }
 
 }

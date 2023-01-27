@@ -1,24 +1,24 @@
-package com.example.nintendoswitchdiscountsbot.service.update.keyboard.add_game;
+package com.example.nintendoswitchdiscountsbot.service.update.keyboard.game;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
+import com.example.nintendoswitchdiscountsbot.business.Game;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardHelper;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
+import com.example.nintendoswitchdiscountsbot.utils.KeyboardHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class ZeroResultKeyboardService implements KeyboardService {
+public class GameBackToMenuKeyboardService implements GameKeyboardService {
 
     private final static int NUMBER_OF_ROWS = 2;
     private final static int FIRST_ROW_INDEX = 0;
-    private final static int SECOND_ROW_INDEX = 1;
 
     private final KeyboardHelper keyboardHelper;
 
@@ -34,11 +34,6 @@ public class ZeroResultKeyboardService implements KeyboardService {
                         Optional.empty()
                 )
         ));
-        rows.get(SECOND_ROW_INDEX).add(keyboardHelper.getButton(
-                "Nintendo eShop",
-                "https://www.nintendo.ru/Nintendo-eShop/Nintendo-eShop-1806894.html",
-                callbackData
-                ));
         return new InlineKeyboardMarkup(rows);
 
     }
@@ -46,7 +41,7 @@ public class ZeroResultKeyboardService implements KeyboardService {
     @Override
     public Set<Subcommand> getSubcommands() {
         return Set.of(
-                Subcommand.ZERO_RESULT,
+                Subcommand.BACK,
                 Subcommand.ADD_GAME
         );
     }
@@ -56,5 +51,10 @@ public class ZeroResultKeyboardService implements KeyboardService {
         return Set.of(
                 Command.ADD_GAME
         );
+    }
+
+    @Override
+    public InlineKeyboardMarkup getGamesMarkup(CallbackData callbackData, List<Game> games) {
+        return getMarkup(callbackData);
     }
 }

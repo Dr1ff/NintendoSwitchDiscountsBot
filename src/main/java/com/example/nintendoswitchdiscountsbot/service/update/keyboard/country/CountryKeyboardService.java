@@ -4,12 +4,12 @@ import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardHelper;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardRowAdjuster;
+import com.example.nintendoswitchdiscountsbot.utils.KeyboardHelper;
+import com.example.nintendoswitchdiscountsbot.utils.KeyboardRowAdjuster;
 import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.PaginationKeyboardUtil;
+import com.example.nintendoswitchdiscountsbot.utils.PaginationKeyboardUtil;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.country.CountrySubcommandArgs;
-import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.number.NumSubcommandArgs;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
 import com.vdurmont.emoji.EmojiManager;
 import com.vdurmont.emoji.EmojiParser;
 import org.springframework.stereotype.Component;
@@ -99,7 +99,7 @@ public class CountryKeyboardService implements KeyboardService {
                 .command(Command.REGISTER)
                 .commandArgs(Optional.empty())
                 .subcommand(Optional.empty())
-                .subcommandArgs(Optional.of(new NumSubcommandArgs(0)))
+                .subcommandArgs(Optional.of(new IntegerSubcommandArgs(0)))
                 .build()
         );
     }

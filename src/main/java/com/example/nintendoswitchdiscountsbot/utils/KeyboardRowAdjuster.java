@@ -1,8 +1,8 @@
-package com.example.nintendoswitchdiscountsbot.service.update.keyboard;
+package com.example.nintendoswitchdiscountsbot.utils;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.number.NumSubcommandArgs;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -36,7 +36,7 @@ public class KeyboardRowAdjuster {
             rows.get(paginationRowIndex).add(keyboardHelper.getButton(
                             callbackData.toBuilder()
                                     .subcommand(Optional.of(Subcommand.PREV))
-                                    .subcommandArgs(Optional.of(new NumSubcommandArgs(prevKeyboardFirstButtonIndex)))
+                                    .subcommandArgs(Optional.of(new IntegerSubcommandArgs(prevKeyboardFirstButtonIndex)))
                                     .build()
                     )
             );
@@ -54,7 +54,7 @@ public class KeyboardRowAdjuster {
             rows.get(paginationRowIndex).add(keyboardHelper.getButton(
                             callbackData.toBuilder()
                                     .subcommand(Optional.of(Subcommand.NEXT))
-                                    .subcommandArgs(Optional.of(new NumSubcommandArgs(nextKeyboardFirstButtonIndex)))
+                                    .subcommandArgs(Optional.of(new IntegerSubcommandArgs(nextKeyboardFirstButtonIndex)))
                                     .build()
                     )
             );

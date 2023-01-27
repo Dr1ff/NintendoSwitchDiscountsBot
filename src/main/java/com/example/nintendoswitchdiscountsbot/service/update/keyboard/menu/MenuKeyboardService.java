@@ -3,7 +3,7 @@ package com.example.nintendoswitchdiscountsbot.service.update.keyboard.menu;
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardHelper;
+import com.example.nintendoswitchdiscountsbot.utils.KeyboardHelper;
 import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;

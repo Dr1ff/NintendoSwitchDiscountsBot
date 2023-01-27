@@ -11,7 +11,7 @@ public interface CallbackSubcommandProcessor {
 
     void process(CallbackQuery callbackQuery, CallbackData callbackData);
 
-    Set<Subcommand> getSubcommand();
+    Set<Subcommand> getSubcommands();
 
     Command getCommand();
 }

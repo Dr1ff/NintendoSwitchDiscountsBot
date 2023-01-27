@@ -21,7 +21,7 @@ public class RegisterCallbackCommandProcessor implements CallbackCommandProcesso
         processors.stream()
                 .filter(processor -> processor.getCommand().equals(getCommand()))
                 .forEach(processor ->
-                        processor.getSubcommand().forEach(subcommand -> map.put(subcommand, processor))
+                        processor.getSubcommands().forEach(subcommand -> map.put(subcommand, processor))
                 );
         this.subcommandProcessors = map;
     }

@@ -24,8 +24,8 @@ public class GameStorageService {
         }
     }
 
-    public Optional<Game> findByNameHash(Integer hash) {
-        var gameEntityO = repository.findByNameHash(hash);
+    public Optional<Game> findByNameHashAndCountry(Integer hash, Country country) {
+        var gameEntityO = repository.findByNameHashAndId_Country(hash, country);
         if (gameEntityO.isEmpty()) {
             return Optional.empty();
         } else {
@@ -47,7 +47,7 @@ public class GameStorageService {
 
     public List<Game> findAllByNameAndCountry(String name, Country country) {
         var entityList = repository
-                .findAllByIdNameContainingIgnoreCaseAndIdCountry(name, country);
+                .findById_NameContainsIgnoreCaseAndId_Country(name, country);
         if (entityList.isEmpty()) {
             return List.of();
         } else {

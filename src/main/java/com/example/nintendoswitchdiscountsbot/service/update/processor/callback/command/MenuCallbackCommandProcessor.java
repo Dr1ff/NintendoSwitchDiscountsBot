@@ -57,7 +57,7 @@ public class MenuCallbackCommandProcessor implements CallbackCommandProcessor {
                         )
                 )
                 .reply(
-                        callbackQuery.getMessage().getChatId(),
+                        callbackQuery,
                         keyboardService.getMarkup(callbackData)
                 );
     }

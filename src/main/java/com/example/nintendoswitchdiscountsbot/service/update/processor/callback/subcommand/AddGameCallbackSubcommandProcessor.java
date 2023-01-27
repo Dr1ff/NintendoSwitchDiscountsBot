@@ -3,8 +3,13 @@ package com.example.nintendoswitchdiscountsbot.service.update.processor.callback
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
+import com.example.nintendoswitchdiscountsbot.repository.NotBeEmptyOptionalException;
+import com.example.nintendoswitchdiscountsbot.service.storage.GameStorageService;
+import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
+import com.example.nintendoswitchdiscountsbot.service.update.keyboard.game.GameKeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.update.reply.add_game.AddGameMessenger;
+import com.example.nintendoswitchdiscountsbot.service.update.reply.add_game.ResultsAddGameMessenger;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -17,12 +22,18 @@ import java.util.Set;
 public class AddGameCallbackSubcommandProcessor implements CallbackSubcommandProcessor {
 
     private final Map<Subcommand, AddGameMessenger> messengers;
-    private final Map<Subcommand, KeyboardService> keyboardServices;
+    private final ResultsAddGameMessenger resultsMessenger;
+    private final Map<Subcommand, GameKeyboardService> keyboardServices;
+    private final GameStorageService gameStorageService;
+    private final UserStorageService userStorageService;
 
     public AddGameCallbackSubcommandProcessor(
             List<AddGameMessenger> messengers,
-            List<KeyboardService> keyboardServices
-    ) {
+            List<GameKeyboardService> keyboardServices,
+            ResultsAddGameMessenger resultsMessenger,
+            GameStorageService gameStorageService,
+            UserStorageService userStorageService) {
+        this.userStorageService = userStorageService;
         this.keyboardServices = new HashMap<>();
         keyboardServices
                 .stream()
@@ -30,42 +41,81 @@ public class AddGameCallbackSubcommandProcessor implements CallbackSubcommandPro
                 .forEach(keyboardService -> keyboardService.getSubcommands()
                         .forEach(subcommand ->
                                 this.keyboardServices.put(subcommand, keyboardService)));
-        Map<Subcommand, AddGameMessenger> replyMap = new HashMap<>();
-        messengers.forEach(reply -> reply.getSubcommand()
-                .forEach(subcommand -> replyMap.put(subcommand, reply)));
-        this.messengers = replyMap;
+        Map<Subcommand, AddGameMessenger> messengerMap = new HashMap<>();
+        this.messengers = messengerMap;
+        messengers.forEach(messenger -> messenger.getSubcommand()
+                .forEach(subcommand -> messengerMap.put(subcommand, messenger)));
+        this.gameStorageService = gameStorageService;
+        this.resultsMessenger = resultsMessenger;
     }
 
     @Override
     public void process(CallbackQuery callbackQuery, CallbackData callbackData) {
-        var subcommand = callbackData.subcommand().orElseThrow(
-                () -> new IllegalArgumentException(
-                        "В AddGameCallbackSubcommandProcessor попала callbackData " +
-                                "с subcommand = Optional.empty"
-                )
-        );
-        messengers.get(subcommand).reply(
-                callbackQuery,
-                callbackData,
-                keyboardServices
-                        .get(subcommand)
-                        .getMarkup(callbackData)
-        );
+
+        if (getSubcommand(callbackData).equals(Subcommand.AFFIRM)) {
+            resultsMessenger.replyWithAffirmationRequest(
+                    callbackQuery.getMessage().getChatId(),
+                    callbackQuery.getMessage().getMessageId(),
+                    gameStorageService
+                            .findByNameHashAndCountry(
+                                    getSubcommandArgs(callbackData).integer(),
+                                    userStorageService
+                                            .findById(callbackQuery
+                                                    .getMessage()
+                                                    .getChatId())
+                                            .orElseThrow()
+                                            .country()
+                            ).orElseThrow(() -> new NotBeEmptyOptionalException(
+                                    "В AddGameCallbackSubcommandProcessor попала callbackData " +
+                                            "с nameHash отсутствующем в репозитории"
+                            )),
+                    keyboardServices.get(getSubcommand(callbackData)).getMarkup(callbackData)
+
+            );
+        } else {
+            messengers.get(getSubcommand(callbackData)).reply(
+                    callbackQuery,
+                    callbackData,
+                    keyboardServices
+                            .get(getSubcommand(callbackData))
+                            .getMarkup(callbackData)
+            );
+        }
     }
 
     @Override
-    public Set<Subcommand> getSubcommand() {
+    public Set<Subcommand> getSubcommands() {
         return Set.of(
                 Subcommand.ADD_GAME,
                 Subcommand.CANCEL,
-                Subcommand.ACCEPT,
-                Subcommand.NEXT,
-                Subcommand.PREV
+                Subcommand.COMPLETE,
+                Subcommand.AFFIRM
         );
     }
 
     @Override
     public Command getCommand() {
         return Command.ADD_GAME;
+    }
+
+    private Subcommand getSubcommand(CallbackData callbackData) {
+        return callbackData.subcommand().orElseThrow(
+                () -> new NotBeEmptyOptionalException(
+                        "В AddGameCallbackSubcommandProcessor попала callbackData " +
+                                "с subcommand = Optional.empty"
+                )
+        );
+    }
+
+    private IntegerSubcommandArgs getSubcommandArgs(CallbackData callbackData) {
+        return ((IntegerSubcommandArgs) callbackData
+                .subcommandArgs()
+                .orElseThrow(
+                        () -> new NotBeEmptyOptionalException(
+                                "В AddGameCallbackSubcommandProcessor попала callbackData " +
+                                        "с subcommandArgs = Optional.empty"
+                        )
+                )
+        );
     }
 }

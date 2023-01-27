@@ -59,7 +59,7 @@ public class RegisterCallbackSubcommandProcessor implements CallbackSubcommandPr
     }
 
     @Override
-    public Set<Subcommand> getSubcommand() {
+    public Set<Subcommand> getSubcommands() {
         return Set.of(
                 Subcommand.PREV,
                 Subcommand.NEXT,

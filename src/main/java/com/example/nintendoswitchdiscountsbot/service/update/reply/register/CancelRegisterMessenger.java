@@ -1,12 +1,11 @@
 package com.example.nintendoswitchdiscountsbot.service.update.reply.register;
 
-import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
-import com.example.nintendoswitchdiscountsbot.service.update.reply.RegisterReply;
+import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.observer.MessageEventPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
@@ -14,7 +13,7 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class CountryRegisterReply implements RegisterReply {
+public class CancelRegisterMessenger extends RegisterMessenger {
 
     private final MessageEventPublisher messageEventPublisher;
 
@@ -25,9 +24,10 @@ public class CountryRegisterReply implements RegisterReply {
             InlineKeyboardMarkup replyMarkup
     ) {
         messageEventPublisher.publish(
-                EditMessageReplyMarkup.builder()
+                EditMessageText.builder()
                         .messageId(callbackQuery.getMessage().getMessageId())
                         .chatId(callbackQuery.getMessage().getChatId())
+                        .text("Для начала работы бота, выберите регион:")
                         .replyMarkup(replyMarkup)
                         .build()
         );
@@ -35,6 +35,6 @@ public class CountryRegisterReply implements RegisterReply {
 
     @Override
     public Set<Subcommand> getSubcommand() {
-        return Set.of(Subcommand.NEXT, Subcommand.PREV);
+        return Set.of(Subcommand.CANCEL);
     }
 }

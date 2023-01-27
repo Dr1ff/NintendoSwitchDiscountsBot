@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 
@@ -26,5 +27,10 @@ public class MessageEventListener {
     @EventListener
     public void handle(EditMessageText messageText) {
         messageSender.send(messageText);
+    }
+
+    @EventListener
+    public void handle(DeleteMessage deleteMessage) {
+        messageSender.send(deleteMessage);
     }
 }
