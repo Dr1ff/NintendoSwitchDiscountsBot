@@ -5,6 +5,7 @@ import com.example.nintendoswitchdiscountsbot.business.User;
 import com.example.nintendoswitchdiscountsbot.entity.GameEntity;
 import com.example.nintendoswitchdiscountsbot.entity.UserEntity;
 import com.example.nintendoswitchdiscountsbot.repository.UserRepository;
+import com.example.nintendoswitchdiscountsbot.utils.GameComparator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +51,18 @@ public class UserStorageService {
         });
 
 
+    }
+
+    public List<Game> getGamesOnRequestFromUser(String request, Long userId) {
+        var games = new ArrayList<Game>();
+        findById(userId).ifPresent(user -> {
+            games.addAll(
+                    gameStorageService.findAllByRequestAndCountry(request, user.country())
+            );
+            games.removeAll(user.wishlist());
+            games.sort(new GameComparator(request).reversed());
+        });
+        return games;
     }
 
     private User fromEntity(UserEntity entity) {

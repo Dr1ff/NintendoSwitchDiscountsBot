@@ -14,7 +14,7 @@ CREATE TABLE game (
                       discount_percent FLOAT8,
                       price_valid_until TIMESTAMP,
                       is_discount BOOLEAN NOT NULL,
-                      "name_hash" INTEGER
+                      hashcode INTEGER
 );
 
 CREATE TABLE notification (

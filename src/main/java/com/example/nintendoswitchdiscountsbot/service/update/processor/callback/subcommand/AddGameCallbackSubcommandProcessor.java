@@ -5,18 +5,16 @@ import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.repository.NotBeEmptyOptionalException;
 import com.example.nintendoswitchdiscountsbot.service.storage.GameStorageService;
-import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
 import com.example.nintendoswitchdiscountsbot.service.update.keyboard.game.GameKeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.update.reply.add_game.AddGameMessenger;
 import com.example.nintendoswitchdiscountsbot.service.update.reply.add_game.ResultsAddGameMessenger;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 @Component
 public class AddGameCallbackSubcommandProcessor implements CallbackSubcommandProcessor {
@@ -25,15 +23,13 @@ public class AddGameCallbackSubcommandProcessor implements CallbackSubcommandPro
     private final ResultsAddGameMessenger resultsMessenger;
     private final Map<Subcommand, GameKeyboardService> keyboardServices;
     private final GameStorageService gameStorageService;
-    private final UserStorageService userStorageService;
 
     public AddGameCallbackSubcommandProcessor(
             List<AddGameMessenger> messengers,
             List<GameKeyboardService> keyboardServices,
             ResultsAddGameMessenger resultsMessenger,
-            GameStorageService gameStorageService,
-            UserStorageService userStorageService) {
-        this.userStorageService = userStorageService;
+            GameStorageService gameStorageService
+    ) {
         this.keyboardServices = new HashMap<>();
         keyboardServices
                 .stream()
@@ -57,17 +53,11 @@ public class AddGameCallbackSubcommandProcessor implements CallbackSubcommandPro
                     callbackQuery.getMessage().getChatId(),
                     callbackQuery.getMessage().getMessageId(),
                     gameStorageService
-                            .findByNameHashAndCountry(
-                                    getSubcommandArgs(callbackData).integer(),
-                                    userStorageService
-                                            .findById(callbackQuery
-                                                    .getMessage()
-                                                    .getChatId())
-                                            .orElseThrow()
-                                            .country()
-                            ).orElseThrow(() -> new NotBeEmptyOptionalException(
+                            .findByHashcode(
+                                    getSubcommandArgs(callbackData).integer())
+                            .orElseThrow(() -> new NotBeEmptyOptionalException(
                                     "В AddGameCallbackSubcommandProcessor попала callbackData " +
-                                            "с nameHash отсутствующем в репозитории"
+                                            "с SubcommandArgs = hashcode отсутствующем в репозитории"
                             )),
                     keyboardServices.get(getSubcommand(callbackData)).getMarkup(callbackData)
 

@@ -33,8 +33,8 @@ public class GameEntity {
     @Column(name = "is_discount", nullable = false)
     private boolean isDiscount;
 
-    @Column(name = "name_hash")
-    private Integer nameHash;
+    @Column(name = "hashcode")
+    private Integer hashcode;
 
     @Getter
     @Embeddable

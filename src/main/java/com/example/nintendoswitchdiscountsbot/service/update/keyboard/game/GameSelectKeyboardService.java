@@ -35,7 +35,7 @@ public class GameSelectKeyboardService implements GameKeyboardService {
                                 game.name(),
                                 callbackData.toBuilder()
                                         .subcommand(Optional.of(Subcommand.AFFIRM))
-                                        .subcommandArgs(Optional.of(new IntegerSubcommandArgs(game.nameHash())))
+                                        .subcommandArgs(Optional.of(new IntegerSubcommandArgs(game.hashcode())))
                                         .build()
                         )
                 )

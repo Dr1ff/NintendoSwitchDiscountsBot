@@ -35,7 +35,7 @@ public class GameMapper {
                 dto.discountPercent(),
                 dto.priceValidUntil(),
                 dto.priceWithoutDiscount().isPresent(),
-                dto.name().hashCode()
+                dto.name().concat(dto.country().name()).hashCode()
         );
     }
 }

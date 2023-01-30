@@ -24,8 +24,8 @@ public class GameStorageService {
         }
     }
 
-    public Optional<Game> findByNameHashAndCountry(Integer hash, Country country) {
-        var gameEntityO = repository.findByNameHashAndId_Country(hash, country);
+    public Optional<Game> findByHashcode(Integer hash) {
+        var gameEntityO = repository.findByHashcode(hash);
         if (gameEntityO.isEmpty()) {
             return Optional.empty();
         } else {
@@ -45,9 +45,9 @@ public class GameStorageService {
         repository.saveAll(games.stream().map(this::toEntity).toList());
     }
 
-    public List<Game> findAllByNameAndCountry(String name, Country country) {
+    public List<Game> findAllByRequestAndCountry(String request, Country country) {
         var entityList = repository
-                .findById_NameContainsIgnoreCaseAndId_Country(name, country);
+                .findById_NameContainsIgnoreCaseAndId_Country(request, country);
         if (entityList.isEmpty()) {
             return List.of();
         } else {
@@ -66,7 +66,7 @@ public class GameStorageService {
                 game.discountPercent().orElse(null),
                 game.priceValidUntil().orElse(null),
                 game.isDiscount(),
-                game.nameHash()
+                game.hashcode()
         );
     }
 
@@ -79,7 +79,7 @@ public class GameStorageService {
                 Optional.ofNullable(entity.getDiscountPercent()),
                 Optional.ofNullable(entity.getPriceValidUntil()),
                 entity.isDiscount(),
-                entity.getNameHash()
+                entity.getHashcode()
         );
     }
 }

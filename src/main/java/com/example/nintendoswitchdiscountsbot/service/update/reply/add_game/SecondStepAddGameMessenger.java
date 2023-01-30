@@ -3,7 +3,6 @@ package com.example.nintendoswitchdiscountsbot.service.update.reply.add_game;
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.business.Game;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
-import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.observer.MessageEventPublisher;
 import com.example.nintendoswitchdiscountsbot.service.storage.GameStorageService;
@@ -43,10 +42,7 @@ public class SecondStepAddGameMessenger extends AddGameMessenger {
         ));
         addGameInWishlist(
                 callbackQuery.getMessage().getChatId(),
-                getGame(
-                        subcommandArgs,
-                        getUserCountry(callbackQuery)
-                )
+                getGame(subcommandArgs)
         );
         messageEventPublisher.publish(
                 EditMessageText.builder()
@@ -55,32 +51,22 @@ public class SecondStepAddGameMessenger extends AddGameMessenger {
                         .messageId(callbackQuery.getMessage().getMessageId())
                         .text(String.format(
                                         "Игра %s \nДобавлена в ваш список для отслеживания скидок",
-                                        getGame(
-                                                subcommandArgs,
-                                                getUserCountry(callbackQuery)
-                                        ).name()
+                                        getGame(subcommandArgs).name()
                                 )
                         )
                         .build()
         );
     }
 
-    private Game getGame(IntegerSubcommandArgs subcommandArgs, Country country) {
+    private Game getGame(IntegerSubcommandArgs subcommandArgs) {
         return gameStorageService
-                .findByNameHashAndCountry(
-                        subcommandArgs.integer(),
-                        country
-                )
+                .findByHashcode(subcommandArgs.integer())
                 .orElseThrow(
                         () -> new IllegalArgumentException(
                                 "В AddGameSecondStepReply попала CallbackData " +
                                         "c SubcommandArgs по которой нет совпадений в таблице game"
                         )
                 );
-    }
-
-    private Country getUserCountry(CallbackQuery callbackQuery) {
-        return userStorageService.findById(callbackQuery.getMessage().getChatId()).orElseThrow().country();
     }
 
     private void addGameInWishlist(Long chatId, Game game) {

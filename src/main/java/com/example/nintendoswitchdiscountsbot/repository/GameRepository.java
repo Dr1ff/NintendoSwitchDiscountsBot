@@ -13,5 +13,5 @@ public interface GameRepository extends JpaRepository<GameEntity, GameEntity.Id>
 
     List<GameEntity> findById_NameContainsIgnoreCaseAndId_Country(String name, Country country);
 
-    Optional<GameEntity> findByNameHashAndId_Country(Integer nameHash, Country country);
+    Optional<GameEntity> findByHashcode(Integer hashcode);
 }

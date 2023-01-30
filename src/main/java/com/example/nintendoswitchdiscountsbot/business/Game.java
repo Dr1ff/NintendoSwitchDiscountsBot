@@ -16,7 +16,7 @@ public record Game(
         Optional<Double> discountPercent,
         Optional<Instant> priceValidUntil,
         boolean isDiscount,
-        Integer nameHash
+        Integer hashcode
 ) {
     @Builder(toBuilder = true)
     public Game {
