@@ -11,15 +11,15 @@ public enum Subcommand {
     AFFIRM(""),
     CONFIRM(""),
 
-    CANCEL(":x:"),
-    PREV(":arrow_left:"),
-    NEXT(":arrow_right:"),
-    ACCEPT(":white_check_mark:"),
-    COMPLETE(":white_check_mark:"),
+    CANCEL("❌"),
+    PREV("⬅️"),
+    NEXT("➡️"),
+    ACCEPT("✅"),
+    COMPLETE("✅"),
 
     WISHLIST(":joystick: Мои игры"),
-    NOTIFICATION(":bell: Оповещения"),
-    REGION(":world_map: Изменить регион"),
+    NOTIFICATION(":mailbox_with_mail: Оповещения"),
+    REGION(":earth_americas: Изменить регион"),
     ADD_GAME(":heavy_plus_sign: Добавить игру"),
     REMOVE_GAME(":heavy_minus_sign: Удалить игру");
 

@@ -30,7 +30,7 @@ public class AcceptMenuMessenger extends MenuMessenger {
                         .chatId(chatId)
                         .text(EmojiParser.parseToUnicode(
                                 """
-                                        🎮🕹️🍄🧙💎МЕНЮ🧝❤️❤️❤️💛
+                                        🎮👾🍄🧙💎МЕНЮ🧝❤️❤️❤️💛
                                         """
                         ))
                         .replyMarkup(replyMarkup)
