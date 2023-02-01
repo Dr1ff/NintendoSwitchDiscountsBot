@@ -1,8 +1,8 @@
-package com.example.nintendoswitchdiscountsbot.service.update.keyboard.game;
+package com.example.nintendoswitchdiscountsbot.service.keyboard.game;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.business.Game;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.keyboard.KeyboardService;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.util.List;

@@ -6,15 +6,16 @@ import lombok.Getter;
 @Getter
 public enum Subcommand {
 
-    BACK(""),
+    SHOW(""),
     SELECT(""),
     AFFIRM(""),
     CONFIRM(""),
 
+    BACK(":back:"),
     CANCEL("❌"),
+    ACCEPT("✅"),
     PREV("⬅️"),
     NEXT("➡️"),
-    ACCEPT("✅"),
     COMPLETE("✅"),
 
     WISHLIST(":joystick: Мои игры"),

@@ -1,4 +1,4 @@
-package com.example.nintendoswitchdiscountsbot.utils;
+package com.example.nintendoswitchdiscountsbot.service.utils;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;

@@ -28,11 +28,16 @@ public class IntegerSubcommandArgsCreator implements SubcommandArgsCreator {
                 Subcommand.NEXT,
                 Subcommand.PREV,
                 Subcommand.BACK,
+                Subcommand.SHOW,
                 Subcommand.CANCEL,
                 Subcommand.AFFIRM,
                 Subcommand.SELECT,
                 Subcommand.COMPLETE,
-                Subcommand.ADD_GAME
+                Subcommand.WISHLIST,
+                Subcommand.ADD_GAME,
+                Subcommand.REMOVE_GAME,
+                Subcommand.REGION,
+                Subcommand.NOTIFICATION
         );
     }
 
@@ -40,7 +45,11 @@ public class IntegerSubcommandArgsCreator implements SubcommandArgsCreator {
     public Set<Command> getCommands() {
         return Set.of(
                 Command.REGISTER,
-                Command.ADD_GAME
+                Command.WISHLIST,
+                Command.ADD_GAME,
+                Command.REMOVE_GAME,
+                Command.REGION,
+                Command.NOTIFICATION
         );
     }
 }

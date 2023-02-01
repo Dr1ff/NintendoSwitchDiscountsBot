@@ -3,7 +3,7 @@ package com.example.nintendoswitchdiscountsbot.service.update.processor.message.
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.menu.MenuKeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.keyboard.menu.MenuKeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.message.MessageCommandProcessor;
 import com.example.nintendoswitchdiscountsbot.service.update.reply.menu.MenuMessenger;
 import org.springframework.stereotype.Component;
@@ -33,12 +33,12 @@ public class MenuMessageCommandProcessor implements MessageCommandProcessor {
 
     @Override
     public void process(Message message) {
-        replies.get(Subcommand.ACCEPT)
+        replies.get(Subcommand.SHOW)
                 .reply(
                         message.getChatId(),
                         keyboardService.getMarkup(new CallbackData(
                                 Command.MENU,
-                                Optional.of(Subcommand.ADD_GAME),
+                                Optional.of(Subcommand.SHOW),
                                 Optional.empty(),
                                 Optional.empty()
                                 )

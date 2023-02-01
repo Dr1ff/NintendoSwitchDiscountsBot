@@ -1,10 +1,11 @@
-package com.example.nintendoswitchdiscountsbot.service.update.keyboard.game;
+package com.example.nintendoswitchdiscountsbot.service.keyboard.game;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.business.Game;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.utils.KeyboardHelper;
+import com.example.nintendoswitchdiscountsbot.service.utils.KeyboardHelper;
+import com.vdurmont.emoji.EmojiParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -27,10 +28,10 @@ public class GameAcceptKeyboardService implements GameKeyboardService {
         var rows = keyboardHelper.getRows(NUMBER_OF_ROWS);
         rows.get(FIRST_ROW_INDEX).add(
                 keyboardHelper.getButton(
-                        "Назад в меню",
+                        EmojiParser.parseToUnicode(":back: Назад в меню"),
                         callbackData.toBuilder()
                                 .command(Command.MENU)
-                                .subcommand(Optional.of(Subcommand.ACCEPT))
+                                .subcommand(Optional.of(Subcommand.SHOW))
                                 .subcommandArgs(Optional.empty())
                                 .build()
                 )

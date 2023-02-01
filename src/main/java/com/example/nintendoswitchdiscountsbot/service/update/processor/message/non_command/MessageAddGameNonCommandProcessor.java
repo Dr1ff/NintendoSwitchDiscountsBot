@@ -4,7 +4,7 @@ import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.game.GameKeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.keyboard.game.GameKeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.message.MessageNonCommandProcessor;
 import com.example.nintendoswitchdiscountsbot.service.update.reply.add_game.ResultsAddGameMessenger;

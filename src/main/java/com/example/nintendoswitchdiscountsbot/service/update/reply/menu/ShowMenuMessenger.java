@@ -14,13 +14,13 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class AcceptMenuMessenger extends MenuMessenger {
+public class ShowMenuMessenger extends MenuMessenger {
 
     private final MessageEventPublisher messageEventPublisher;
 
     @Override
     public Set<Subcommand> getSubcommand() {
-        return Set.of(Subcommand.ACCEPT);
+        return Set.of(Subcommand.SHOW);
     }
 
     @Override

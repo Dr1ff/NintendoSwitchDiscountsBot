@@ -5,7 +5,7 @@ import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.repository.NotBeEmptyOptionalException;
 import com.example.nintendoswitchdiscountsbot.service.storage.GameStorageService;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.game.GameKeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.keyboard.game.GameKeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.update.reply.add_game.AddGameMessenger;
 import com.example.nintendoswitchdiscountsbot.service.update.reply.add_game.ResultsAddGameMessenger;
@@ -79,7 +79,8 @@ public class AddGameCallbackSubcommandProcessor implements CallbackSubcommandPro
                 Subcommand.ADD_GAME,
                 Subcommand.CANCEL,
                 Subcommand.COMPLETE,
-                Subcommand.AFFIRM
+                Subcommand.AFFIRM,
+                Subcommand.BACK
         );
     }
 

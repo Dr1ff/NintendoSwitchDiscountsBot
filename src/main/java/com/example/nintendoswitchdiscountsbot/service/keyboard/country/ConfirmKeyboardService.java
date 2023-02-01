@@ -1,11 +1,11 @@
-package com.example.nintendoswitchdiscountsbot.service.update.keyboard.country;
+package com.example.nintendoswitchdiscountsbot.service.keyboard.country;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
-import com.example.nintendoswitchdiscountsbot.utils.KeyboardHelper;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.keyboard.KeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.utils.KeyboardHelper;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.country.CountrySubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.SubcommandArgs;

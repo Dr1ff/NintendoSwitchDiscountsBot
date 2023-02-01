@@ -4,7 +4,7 @@ import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.menu.MenuKeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.keyboard.menu.MenuKeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.update.reply.menu.MenuMessenger;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;

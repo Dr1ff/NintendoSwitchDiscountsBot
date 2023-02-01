@@ -3,7 +3,7 @@ package com.example.nintendoswitchdiscountsbot.service.update.processor.callback
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.keyboard.KeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.update.reply.register.RegisterMessenger;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;

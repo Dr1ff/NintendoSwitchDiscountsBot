@@ -1,4 +1,4 @@
-package com.example.nintendoswitchdiscountsbot.utils;
+package com.example.nintendoswitchdiscountsbot.service.utils;
 
 import com.example.nintendoswitchdiscountsbot.business.Game;
 

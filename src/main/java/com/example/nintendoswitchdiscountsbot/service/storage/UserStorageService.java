@@ -5,7 +5,7 @@ import com.example.nintendoswitchdiscountsbot.business.User;
 import com.example.nintendoswitchdiscountsbot.entity.GameEntity;
 import com.example.nintendoswitchdiscountsbot.entity.UserEntity;
 import com.example.nintendoswitchdiscountsbot.repository.UserRepository;
-import com.example.nintendoswitchdiscountsbot.utils.GameComparator;
+import com.example.nintendoswitchdiscountsbot.service.utils.GameComparator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class UserStorageService {
         repository.delete(toEntity(user));
     }
 
-    public void addGame(Long userId, Game game) {
+    public void addGameInWishlist(Long userId, Game game) {
         var UserO = findById(userId);
         List<Game> games = new ArrayList<>();
         UserO.ifPresent(user -> {
@@ -49,8 +49,18 @@ public class UserStorageService {
                     .wishlist(games)
                     .build());
         });
+    }
 
-
+    public void removeGameAtWishlist(Long userId, Game game) {
+        var UserO = findById(userId);
+        List<Game> games = new ArrayList<>();
+        UserO.ifPresent(user -> {
+            games.addAll(user.wishlist());
+            games.remove(game);
+            add(user.toBuilder()
+                    .wishlist(games)
+                    .build());
+        });
     }
 
     public List<Game> getGamesOnRequestFromUser(String request, Long userId) {

@@ -23,7 +23,7 @@ public class FirstStepAddGameMessenger extends AddGameMessenger {
 
     @Override
     public Set<Subcommand> getSubcommand() {
-        return Set.of(Subcommand.ADD_GAME, Subcommand.CANCEL);
+        return Set.of(Subcommand.ADD_GAME, Subcommand.BACK);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class FirstStepAddGameMessenger extends AddGameMessenger {
                         .messageId(callbackQuery.getMessage().getMessageId())
                         .build()
         );
-        reply(callbackQuery.getMessage().getChatId());
+        reply(callbackQuery.getMessage().getChatId(), replyMarkup);
     }
 
     @Override
@@ -42,22 +42,23 @@ public class FirstStepAddGameMessenger extends AddGameMessenger {
         return Command.ADD_GAME;
     }
 
-    public void reply(Long chatId) {
-        addUser(chatId);
+    public void reply(Long chatId, InlineKeyboardMarkup replyMarkup) {
+        setUserState(chatId);
         messageEventPublisher.publish(
                 SendMessage.builder()
                         .text(
-                                """
-                                        Для того чтобы добавить игру\040
-                                        в список отслеживания, пришлите мне ее название.
-                                        """
+                                "Для того чтобы добавить " +
+                                        "игру в список отслеживания, " +
+                                        "пришлите мне ее название."
+
                         )
+                        .replyMarkup(replyMarkup)
                         .chatId(chatId)
                         .build()
         );
     }
 
-    private void addUser(Long chatId) {
+    private void setUserState(Long chatId) {
         userStorageService.add(
                 userStorageService
                         .findById(chatId).orElseThrow(

@@ -70,6 +70,6 @@ public class SecondStepAddGameMessenger extends AddGameMessenger {
     }
 
     private void addGameInWishlist(Long chatId, Game game) {
-        userStorageService.addGame(chatId, game);
+        userStorageService.addGameInWishlist(chatId, game);
     }
 }

@@ -1,10 +1,11 @@
-package com.example.nintendoswitchdiscountsbot.service.update.keyboard.menu;
+package com.example.nintendoswitchdiscountsbot.service.keyboard.menu;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.utils.KeyboardHelper;
-import com.example.nintendoswitchdiscountsbot.service.update.keyboard.KeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.keyboard.KeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
+import com.example.nintendoswitchdiscountsbot.service.utils.KeyboardHelper;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -33,8 +34,7 @@ public class MenuKeyboardService implements KeyboardService {
         return new InlineKeyboardMarkup(
                 assembleRows(
                         keyboardHelper.getRows(subcommands.size()),
-                        subcommands.iterator(),
-                        callbackData
+                        subcommands.iterator()
                 )
         );
     }
@@ -53,8 +53,7 @@ public class MenuKeyboardService implements KeyboardService {
 
     private List<List<InlineKeyboardButton>> assembleRows(
             List<List<InlineKeyboardButton>> rows,
-            Iterator<Subcommand> subcommandIterator,
-            CallbackData callbackData
+            Iterator<Subcommand> subcommandIterator
     ) {
         for (int i = 0; subcommandIterator.hasNext(); i++) {
             var subcommand = subcommandIterator.next();
@@ -63,7 +62,7 @@ public class MenuKeyboardService implements KeyboardService {
                             Command.valueOf(subcommand.name()),
                             Optional.of(subcommand),
                             Optional.empty(),
-                            Optional.empty()
+                            Optional.of(new IntegerSubcommandArgs(0))
                     )
             ));
         }

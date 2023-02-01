@@ -1,4 +1,4 @@
-package com.example.nintendoswitchdiscountsbot.service.update.keyboard;
+package com.example.nintendoswitchdiscountsbot.service.keyboard;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
