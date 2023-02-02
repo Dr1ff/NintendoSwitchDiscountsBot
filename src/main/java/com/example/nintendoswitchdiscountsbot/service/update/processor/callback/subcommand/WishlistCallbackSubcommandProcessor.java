@@ -4,6 +4,7 @@ import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.business.Game;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
+import com.example.nintendoswitchdiscountsbot.repository.RepositorySearchException;
 import com.example.nintendoswitchdiscountsbot.service.keyboard.wishlist.WishlistKeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.storage.GameStorageService;
 import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
@@ -43,12 +44,10 @@ public class WishlistCallbackSubcommandProcessor implements CallbackSubcommandPr
 
     @Override
     public void process(CallbackQuery callbackQuery, CallbackData callbackData) {
-
         var subcommand = callbackData.subcommand().orElseThrow();
         var chatId = callbackQuery.getMessage().getChatId();
         var messageId = callbackQuery.getMessage().getMessageId();
-        userStateValidation(chatId);
-        if (subcommand.equals(Subcommand.REMOVE_GAME)) {
+        if (subcommand.equals(Subcommand.COMPLETE)) {
             removeGame(chatId, getGame(callbackData));
             wishlistMessenger.gameRemoveReply(
                     getGame(callbackData),
@@ -56,7 +55,7 @@ public class WishlistCallbackSubcommandProcessor implements CallbackSubcommandPr
                     messageId,
                     keyboardServices.get(subcommand).getMarkup(callbackData)
             );
-        } else if (subcommand.equals(Subcommand.SHOW)) {
+        } else if (subcommand.equals(Subcommand.SHOW) || subcommand.equals(Subcommand.CANCEL)) {
             wishlistMessenger.gameShowReply(
                     getGame(callbackData),
                     chatId,
@@ -69,8 +68,17 @@ public class WishlistCallbackSubcommandProcessor implements CallbackSubcommandPr
                                     )
                             )
             );
+        } else if (subcommand.equals(Subcommand.AFFIRM)) {
+            wishlistMessenger.affirmReply(
+                    getGame(callbackData),
+                    chatId,
+                    messageId,
+                    keyboardServices
+                            .get(subcommand)
+                            .getMarkup(callbackData)
+            );
         } else {
-            wishlistMessenger.selectReply(
+            wishlistMessenger.wishlistReply(
                     chatId,
                     messageId,
                     keyboardServices
@@ -81,14 +89,15 @@ public class WishlistCallbackSubcommandProcessor implements CallbackSubcommandPr
                             )
             );
         }
-
     }
 
     @Override
     public Set<Subcommand> getSubcommands() {
         return Set.of(
-                Subcommand.REMOVE_GAME,
+                Subcommand.COMPLETE,
                 Subcommand.WISHLIST,
+                Subcommand.AFFIRM,
+                Subcommand.CANCEL,
                 Subcommand.BACK,
                 Subcommand.PREV,
                 Subcommand.NEXT,
@@ -110,12 +119,15 @@ public class WishlistCallbackSubcommandProcessor implements CallbackSubcommandPr
                 .findByHashcode(
                         callbackData.subcommandArgs()
                                 .orElseThrow(
-                                        //todo: написать текст ошибки
+                                        () -> new IllegalArgumentException(
+                                                "В WishlistCallbackSubcommandProcessor попала callbackData " +
+                                                        "с subcommandArgs = Optional.empty")
                                 )
                                 .hashCode()
                 )
                 .orElseThrow(
-                        //todo: написать текст ошибки
+                        () -> new RepositorySearchException(
+                                "В GameRepository не найдена игра по hashcode")
                 );
     }
 
@@ -124,37 +136,9 @@ public class WishlistCallbackSubcommandProcessor implements CallbackSubcommandPr
                         callbackQuery.getMessage().getChatId()
                 )
                 .orElseThrow(
-                        //todo: написать текст ошибки
+                        () -> new RepositorySearchException(
+                                "В UserRepository не найден user с таким id")
                 )
                 .wishlist();
-    }
-
-    private void userStateValidation(Long chatId) {
-        if (!currentUserStateIsCorrect(chatId)) {
-            setUserState(chatId);
-        }
-    }
-
-    private void setUserState(Long chatId) {
-        userStorageService.add(
-                userStorageService
-                        .findById(chatId)
-                        .orElseThrow(
-                                //todo: написать текст ошибки
-                        )
-                        .toBuilder()
-                        .state(getCommand())
-                        .build()
-        );
-    }
-
-    private boolean currentUserStateIsCorrect(Long chatId) {
-        return userStorageService
-                .findById(chatId)
-                .orElseThrow(
-                        //todo: написать текст ошибки
-                )
-                .state()
-                .equals(getCommand());
     }
 }

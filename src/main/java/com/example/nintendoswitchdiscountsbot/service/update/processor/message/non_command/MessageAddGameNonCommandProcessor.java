@@ -52,7 +52,7 @@ public class MessageAddGameNonCommandProcessor implements MessageNonCommandProce
                     message.getMessageId(),
                     keyboardServices.get(Subcommand.BACK).getMarkup(
                             new CallbackData(
-                                    Command.ADD_GAME,
+                                    Command.G_ADD,
                                     Optional.of(Subcommand.BACK),
                                     Optional.empty(),
                                     Optional.empty()
@@ -65,7 +65,7 @@ public class MessageAddGameNonCommandProcessor implements MessageNonCommandProce
                     message.getMessageId(),
                     keyboardServices.get(Subcommand.SELECT).getGamesMarkup(
                             new CallbackData(
-                                    Command.ADD_GAME,
+                                    Command.G_ADD,
                                     Optional.of(Subcommand.SELECT),
                                     Optional.empty(),
                                     Optional.of(new IntegerSubcommandArgs(FIRST_INDEX))
@@ -78,6 +78,6 @@ public class MessageAddGameNonCommandProcessor implements MessageNonCommandProce
 
     @Override
     public Command getState() {
-        return Command.ADD_GAME;
+        return Command.G_ADD;
     }
 }

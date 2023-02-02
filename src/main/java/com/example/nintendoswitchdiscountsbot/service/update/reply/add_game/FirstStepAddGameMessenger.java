@@ -5,14 +5,12 @@ import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.observer.MessageEventPublisher;
 import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-
-import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -23,29 +21,35 @@ public class FirstStepAddGameMessenger extends AddGameMessenger {
 
     @Override
     public Set<Subcommand> getSubcommand() {
-        return Set.of(Subcommand.ADD_GAME, Subcommand.BACK);
+        return Set.of(
+                Subcommand.G_ADD,
+                Subcommand.CANCEL,
+                Subcommand.BACK
+        );
     }
 
     @Override
     public void reply(CallbackQuery callbackQuery, CallbackData callbackData, InlineKeyboardMarkup replyMarkup) {
-        messageEventPublisher.publish(
-                DeleteMessage.builder()
-                        .chatId(callbackQuery.getMessage().getChatId())
-                        .messageId(callbackQuery.getMessage().getMessageId())
-                        .build()
+        reply(
+                callbackQuery.getMessage().getChatId(),
+                callbackQuery.getMessage().getMessageId(),
+                replyMarkup
         );
-        reply(callbackQuery.getMessage().getChatId(), replyMarkup);
     }
 
     @Override
     public Command getCommand() {
-        return Command.ADD_GAME;
+        return Command.G_ADD;
     }
 
-    public void reply(Long chatId, InlineKeyboardMarkup replyMarkup) {
+    public void reply(
+            Long chatId,
+            Integer messageId,
+            InlineKeyboardMarkup replyMarkup
+    ) {
         setUserState(chatId);
         messageEventPublisher.publish(
-                SendMessage.builder()
+                EditMessageText.builder()
                         .text(
                                 "Для того чтобы добавить " +
                                         "игру в список отслеживания, " +
@@ -53,6 +57,7 @@ public class FirstStepAddGameMessenger extends AddGameMessenger {
 
                         )
                         .replyMarkup(replyMarkup)
+                        .messageId(messageId)
                         .chatId(chatId)
                         .build()
         );
@@ -65,7 +70,7 @@ public class FirstStepAddGameMessenger extends AddGameMessenger {
                                 () -> new RuntimeException("")
                         )
                         .toBuilder()
-                        .state(Command.ADD_GAME)
+                        .state(Command.G_ADD)
                         .build()
         );
     }

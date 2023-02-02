@@ -13,19 +13,33 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @Component
 @RequiredArgsConstructor
-public class WishlistMessenger implements Messenger {
+public class WishlistMessenger implements Messenger { 
 
     private final static String PARSE_MODE = "html";
 
     private final MessageEventPublisher messageEventPublisher;
 
-    public void selectReply(
+    public void wishlistReply(
             Long chatId,
             Integer messageId,
             InlineKeyboardMarkup replyMarkup
     ) {
         reply(
-                getSelectText(),
+                getWishlistText(),
+                chatId,
+                messageId,
+                replyMarkup
+        );
+    }
+
+    public void affirmReply(
+            Game game,
+            Long chatId,
+            Integer messageId,
+            InlineKeyboardMarkup replyMarkup
+    ) {
+        reply(
+                getAffirmText(game),
                 chatId,
                 messageId,
                 replyMarkup
@@ -87,7 +101,7 @@ public class WishlistMessenger implements Messenger {
         );
     }
 
-    private String getSelectText() {
+    private String getWishlistText() {
         return "Чтобы увидеть информацию об игре " +
                 "или удалить ее, нажмите на кнопку с названием игры";
     }
@@ -96,18 +110,17 @@ public class WishlistMessenger implements Messenger {
         StringBuilder priceInfo = new StringBuilder();
         if (game.isDiscount()) {
             priceInfo
-                    .append("<s>")
-                    .append(game.priceWithoutDiscount().orElseThrow())
-                    .append("</s>")
-                    .append(game.country().getCurrency())
-                    .append(" ")
                     .append("-")
                     .append(game.discountPercent().orElseThrow().intValue())
                     .append("%")
                     .append(" ")
                     .append(game.actualPrice())
-
-                    .append(game.country().getCurrency());
+                    .append(game.country().getCurrency())
+                    .append(" ")
+                    .append("<s>")
+                    .append(game.priceWithoutDiscount().orElseThrow())
+                    .append(game.country().getCurrency())
+                    .append("</s>");
         } else {
             priceInfo
                     .append(game.actualPrice())
@@ -122,6 +135,10 @@ public class WishlistMessenger implements Messenger {
                 game.country(),
                 priceInfo
         );
+    }
+
+    private String getAffirmText(Game game) {
+        return String.format("Вы действительно хотите удалить <b>%s</b> из вашего списака?", game.name());
     }
 
     private String getGameRemoveText(Game game) {

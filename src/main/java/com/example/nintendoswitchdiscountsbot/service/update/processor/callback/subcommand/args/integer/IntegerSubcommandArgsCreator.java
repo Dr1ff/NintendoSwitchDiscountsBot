@@ -34,8 +34,7 @@ public class IntegerSubcommandArgsCreator implements SubcommandArgsCreator {
                 Subcommand.SELECT,
                 Subcommand.COMPLETE,
                 Subcommand.WISHLIST,
-                Subcommand.ADD_GAME,
-                Subcommand.REMOVE_GAME,
+                Subcommand.G_ADD,
                 Subcommand.REGION,
                 Subcommand.NOTIFICATION
         );
@@ -46,8 +45,7 @@ public class IntegerSubcommandArgsCreator implements SubcommandArgsCreator {
         return Set.of(
                 Command.REGISTER,
                 Command.WISHLIST,
-                Command.ADD_GAME,
-                Command.REMOVE_GAME,
+                Command.G_ADD,
                 Command.REGION,
                 Command.NOTIFICATION
         );

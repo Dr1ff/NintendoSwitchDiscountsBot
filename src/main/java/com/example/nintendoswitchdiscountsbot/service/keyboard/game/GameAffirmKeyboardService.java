@@ -5,14 +5,12 @@ import com.example.nintendoswitchdiscountsbot.business.Game;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.utils.KeyboardHelper;
-import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Component
 @RequiredArgsConstructor
@@ -30,15 +28,14 @@ public class GameAffirmKeyboardService implements GameKeyboardService {
                 keyboardHelper.getButton(
                 callbackData
                         .toBuilder()
-                        .command(Command.ADD_GAME)
-                        .subcommand(Optional.of(Subcommand.BACK))
-                        .subcommandArgs(Optional.of(new IntegerSubcommandArgs(0)))
+                        .command(Command.G_ADD)
+                        .subcommand(Optional.of(Subcommand.CANCEL))
                         .build()
                 ),
                 keyboardHelper.getButton(
                         callbackData
                                 .toBuilder()
-                                .command(Command.ADD_GAME)
+                                .command(Command.G_ADD)
                                 .subcommand(Optional.of(Subcommand.COMPLETE))
                                 .build()
                 )
@@ -54,7 +51,7 @@ public class GameAffirmKeyboardService implements GameKeyboardService {
     @Override
     public Set<Command> getCommands() {
         return Set.of(
-                Command.ADD_GAME
+                Command.G_ADD
         );
     }
 

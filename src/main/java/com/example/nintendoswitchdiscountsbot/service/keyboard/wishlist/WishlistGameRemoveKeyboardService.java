@@ -20,6 +20,7 @@ public class WishlistGameRemoveKeyboardService implements WishlistKeyboardServic
 
     private final static int NUMBER_OF_ROWS = 1;
     private final static int BUTTON_INDEX = 0;
+    private final static int WISHLIST_START_INDEX = 0;
 
     private final KeyboardHelper keyboardHelper;
 
@@ -36,7 +37,7 @@ public class WishlistGameRemoveKeyboardService implements WishlistKeyboardServic
                         EmojiParser.parseToUnicode(":back: Назад к списку"),
                         callbackData.toBuilder()
                                 .subcommand(Optional.of(Subcommand.BACK))
-                                .subcommandArgs(Optional.of(new IntegerSubcommandArgs(BUTTON_INDEX)))
+                                .subcommandArgs(Optional.of(new IntegerSubcommandArgs(WISHLIST_START_INDEX)))
                                 .build()
                 )
         );
@@ -45,7 +46,7 @@ public class WishlistGameRemoveKeyboardService implements WishlistKeyboardServic
 
     @Override
     public Set<Subcommand> getSubcommands() {
-        return Set.of(Subcommand.REMOVE_GAME);
+        return Set.of(Subcommand.COMPLETE);
     }
 
     @Override

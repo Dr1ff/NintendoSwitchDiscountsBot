@@ -16,6 +16,6 @@ public abstract class AddGameMessenger implements Messenger {
 
     @Override
     public Command getCommand() {
-        return Command.ADD_GAME;
+        return Command.G_ADD;
     }
 }

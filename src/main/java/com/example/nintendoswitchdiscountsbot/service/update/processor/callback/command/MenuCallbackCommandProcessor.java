@@ -6,6 +6,7 @@ import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
 import com.example.nintendoswitchdiscountsbot.service.keyboard.menu.MenuKeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.update.reply.menu.MenuMessenger;
+import com.example.nintendoswitchdiscountsbot.service.utils.UserStateValidator;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -19,14 +20,17 @@ public class MenuCallbackCommandProcessor implements CallbackCommandProcessor {
     private final MenuKeyboardService keyboardService;
     private final Map<Subcommand, MenuMessenger> replies;
     private final UserStorageService userStorageService;
+    private final UserStateValidator userStateValidator;
 
     public MenuCallbackCommandProcessor(
             MenuKeyboardService keyboardService,
             List<MenuMessenger> replies,
-            UserStorageService userStorageService
+            UserStorageService userStorageService,
+            UserStateValidator userStateValidator
     ) {
         this.keyboardService = keyboardService;
         this.userStorageService = userStorageService;
+        this.userStateValidator = userStateValidator;
         Map<Subcommand, MenuMessenger> replyMap = new HashMap<>();
         replies.forEach(reply -> reply.getSubcommand()
                 .forEach(subcommand -> replyMap.put(subcommand, reply)));
@@ -35,6 +39,10 @@ public class MenuCallbackCommandProcessor implements CallbackCommandProcessor {
 
     @Override
     public void process(CallbackQuery callbackQuery, CallbackData callbackData) {
+        userStateValidator.validation(
+                callbackQuery.getMessage().getChatId(),
+                this
+        );
         userStorageService.add(
                 userStorageService
                         .findById(callbackQuery.getFrom().getId())

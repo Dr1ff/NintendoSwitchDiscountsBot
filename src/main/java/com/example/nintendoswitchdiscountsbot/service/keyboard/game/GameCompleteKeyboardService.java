@@ -4,6 +4,7 @@ import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.business.Game;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.utils.KeyboardHelper;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,11 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class GameAcceptKeyboardService implements GameKeyboardService {
+public class GameCompleteKeyboardService implements GameKeyboardService {
 
     private final static int NUMBER_OF_ROWS = 1;
     private final static int FIRST_ROW_INDEX = 0;
+    private final static int WISHLIST_START_INDEX = 0;
 
     private final KeyboardHelper keyboardHelper;
 
@@ -28,11 +30,11 @@ public class GameAcceptKeyboardService implements GameKeyboardService {
         var rows = keyboardHelper.getRows(NUMBER_OF_ROWS);
         rows.get(FIRST_ROW_INDEX).add(
                 keyboardHelper.getButton(
-                        EmojiParser.parseToUnicode(":back: Назад в меню"),
+                        EmojiParser.parseToUnicode(":back: Назад к списку"),
                         callbackData.toBuilder()
-                                .command(Command.MENU)
-                                .subcommand(Optional.of(Subcommand.SHOW))
-                                .subcommandArgs(Optional.empty())
+                                .command(Command.WISHLIST)
+                                .subcommand(Optional.of(Subcommand.BACK))
+                                .subcommandArgs(Optional.of(new IntegerSubcommandArgs(WISHLIST_START_INDEX)))
                                 .build()
                 )
         );
@@ -40,9 +42,8 @@ public class GameAcceptKeyboardService implements GameKeyboardService {
                 keyboardHelper.getButton(
                         "Добавить еще",
                         callbackData.toBuilder()
-                                .command(Command.ADD_GAME)
-                                .subcommand(Optional.of(Subcommand.ADD_GAME))
-                                .subcommandArgs(Optional.empty())
+                                .command(Command.G_ADD)
+                                .subcommand(Optional.of(Subcommand.G_ADD))
                                 .build()
                 )
         );
@@ -59,7 +60,7 @@ public class GameAcceptKeyboardService implements GameKeyboardService {
     @Override
     public Set<Command> getCommands() {
         return Set.of(
-                Command.ADD_GAME
+                Command.G_ADD
         );
     }
 

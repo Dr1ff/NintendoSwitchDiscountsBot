@@ -23,6 +23,6 @@ public class IntCommandArgsCreator implements CommandArgsCreator {
 
     @Override
     public Set<Command> getCommands() {
-        return Set.of(Command.ADD_GAME);
+        return Set.of(Command.G_ADD);
     }
 }

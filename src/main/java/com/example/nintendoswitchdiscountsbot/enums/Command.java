@@ -4,13 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum Command {
-    START,
-    REGISTER,
     MENU,
-    ADD_GAME,
-    WISHLIST,
-    REMOVE_GAME,
+    START,
+    BREAK,
+    G_ADD,
     REGION,
-    NOTIFICATION,
-    BREAK
+    REGISTER,
+    WISHLIST,
+    NOTIFICATION
 }

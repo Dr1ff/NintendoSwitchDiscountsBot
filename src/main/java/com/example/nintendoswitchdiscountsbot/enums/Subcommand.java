@@ -11,18 +11,17 @@ public enum Subcommand {
     AFFIRM(""),
     CONFIRM(""),
 
-    BACK(":back:"),
     CANCEL("❌"),
     ACCEPT("✅"),
     PREV("⬅️"),
     NEXT("➡️"),
     COMPLETE("✅"),
+    BACK(":back:"),
 
     WISHLIST(":joystick: Мои игры"),
-    NOTIFICATION(":mailbox_with_mail: Оповещения"),
+    G_ADD(":heavy_plus_sign: Добавить игру"),
     REGION(":earth_americas: Изменить регион"),
-    ADD_GAME(":heavy_plus_sign: Добавить игру"),
-    REMOVE_GAME(":heavy_minus_sign: Удалить игру");
+    NOTIFICATION(":mailbox_with_mail: Оповещения");
 
     private final String buttonText;
 

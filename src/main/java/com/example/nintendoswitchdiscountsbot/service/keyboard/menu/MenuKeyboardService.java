@@ -22,8 +22,6 @@ public class MenuKeyboardService implements KeyboardService {
         this.keyboardHelper = keyboardHelper;
         this.subcommands = List.of(
                 Subcommand.WISHLIST,
-                Subcommand.ADD_GAME,
-                Subcommand.REMOVE_GAME,
                 Subcommand.REGION,
                 Subcommand.NOTIFICATION
         );

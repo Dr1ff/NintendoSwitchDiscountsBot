@@ -26,6 +26,15 @@ public class ResultsAddGameMessenger extends AddGameMessenger{
         return Set.of(Subcommand.AFFIRM);
     }
 
+    @Override
+    public void reply(CallbackQuery callbackQuery, CallbackData callbackData, InlineKeyboardMarkup replyMarkup) {
+        replyWithResults(
+                callbackQuery.getMessage().getChatId(),
+                callbackQuery.getMessage().getMessageId(),
+                replyMarkup
+        );
+    }
+
     public void replyWithoutResult(Long chatId, Integer messageId, InlineKeyboardMarkup replyMarkup) {
         messageEventPublisher.publish(SendMessage.builder()
                 .chatId(chatId)
@@ -84,14 +93,5 @@ public class ResultsAddGameMessenger extends AddGameMessenger{
 
                 ))
                 .build());
-    }
-
-    @Override
-    public void reply(CallbackQuery callbackQuery, CallbackData callbackData, InlineKeyboardMarkup replyMarkup) {
-        replyWithResults(
-                callbackQuery.getMessage().getChatId(),
-                callbackQuery.getMessage().getMessageId(),
-                replyMarkup
-        );
     }
 }

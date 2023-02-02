@@ -62,14 +62,13 @@ public class GameSelectKeyboardService implements GameKeyboardService {
     @Override
     public Set<Subcommand> getSubcommands() {
         return Set.of(
-                Subcommand.SELECT,
-                Subcommand.CANCEL
+                Subcommand.SELECT
         );
     }
 
     @Override
     public Set<Command> getCommands() {
-        return Set.of(Command.ADD_GAME);
+        return Set.of(Command.G_ADD);
     }
 
 }

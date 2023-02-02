@@ -4,6 +4,7 @@ import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.CallbackSubcommandProcessor;
+import com.example.nintendoswitchdiscountsbot.service.utils.UserStateValidator;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -15,8 +16,13 @@ import java.util.Map;
 public class AddGameCallbackCommandProcessor implements CallbackCommandProcessor {
 
     private final Map<Subcommand, CallbackSubcommandProcessor> subcommandProcessors;
+    private final UserStateValidator userStateValidator;
 
-    public AddGameCallbackCommandProcessor(List<CallbackSubcommandProcessor> processors) {
+    public AddGameCallbackCommandProcessor(
+            List<CallbackSubcommandProcessor> processors,
+            UserStateValidator userStateValidator
+    ) {
+        this.userStateValidator = userStateValidator;
         Map<Subcommand, CallbackSubcommandProcessor> map = new HashMap<>();
         processors.stream()
                 .filter(processor ->
@@ -28,6 +34,10 @@ public class AddGameCallbackCommandProcessor implements CallbackCommandProcessor
 
     @Override
     public void process(CallbackQuery callbackQuery, CallbackData callbackData) {
+        userStateValidator.validation(
+                callbackQuery.getMessage().getChatId(),
+                this
+        );
         subcommandProcessors
                 .get(
                         callbackData.subcommand().orElseThrow(() -> new IllegalArgumentException(
@@ -41,6 +51,6 @@ public class AddGameCallbackCommandProcessor implements CallbackCommandProcessor
 
     @Override
     public Command getCommand() {
-        return Command.ADD_GAME;
+        return Command.G_ADD;
     }
 }

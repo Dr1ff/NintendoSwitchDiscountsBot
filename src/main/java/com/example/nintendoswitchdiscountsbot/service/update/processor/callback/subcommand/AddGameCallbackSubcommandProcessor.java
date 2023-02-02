@@ -3,7 +3,7 @@ package com.example.nintendoswitchdiscountsbot.service.update.processor.callback
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.repository.NotBeEmptyOptionalException;
+import com.example.nintendoswitchdiscountsbot.repository.RepositorySearchException;
 import com.example.nintendoswitchdiscountsbot.service.storage.GameStorageService;
 import com.example.nintendoswitchdiscountsbot.service.keyboard.game.GameKeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
@@ -55,7 +55,7 @@ public class AddGameCallbackSubcommandProcessor implements CallbackSubcommandPro
                     gameStorageService
                             .findByHashcode(
                                     getSubcommandArgs(callbackData).integer())
-                            .orElseThrow(() -> new NotBeEmptyOptionalException(
+                            .orElseThrow(() -> new RepositorySearchException(
                                     "В AddGameCallbackSubcommandProcessor попала callbackData " +
                                             "с SubcommandArgs = hashcode отсутствующем в репозитории"
                             )),
@@ -76,22 +76,21 @@ public class AddGameCallbackSubcommandProcessor implements CallbackSubcommandPro
     @Override
     public Set<Subcommand> getSubcommands() {
         return Set.of(
-                Subcommand.ADD_GAME,
+                Subcommand.G_ADD,
                 Subcommand.CANCEL,
                 Subcommand.COMPLETE,
-                Subcommand.AFFIRM,
-                Subcommand.BACK
+                Subcommand.AFFIRM
         );
     }
 
     @Override
     public Command getCommand() {
-        return Command.ADD_GAME;
+        return Command.G_ADD;
     }
 
     private Subcommand getSubcommand(CallbackData callbackData) {
         return callbackData.subcommand().orElseThrow(
-                () -> new NotBeEmptyOptionalException(
+                () -> new RepositorySearchException(
                         "В AddGameCallbackSubcommandProcessor попала callbackData " +
                                 "с subcommand = Optional.empty"
                 )
@@ -102,7 +101,7 @@ public class AddGameCallbackSubcommandProcessor implements CallbackSubcommandPro
         return ((IntegerSubcommandArgs) callbackData
                 .subcommandArgs()
                 .orElseThrow(
-                        () -> new NotBeEmptyOptionalException(
+                        () -> new RepositorySearchException(
                                 "В AddGameCallbackSubcommandProcessor попала callbackData " +
                                         "с subcommandArgs = Optional.empty"
                         )

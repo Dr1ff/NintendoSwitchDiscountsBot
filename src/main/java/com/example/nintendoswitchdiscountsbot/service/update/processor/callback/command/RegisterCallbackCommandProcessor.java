@@ -4,6 +4,7 @@ import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.CallbackSubcommandProcessor;
+import com.example.nintendoswitchdiscountsbot.service.utils.UserStateValidator;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
@@ -15,8 +16,13 @@ import java.util.Map;
 public class RegisterCallbackCommandProcessor implements CallbackCommandProcessor {
 
     private final Map<Subcommand, CallbackSubcommandProcessor> subcommandProcessors;
+    private final UserStateValidator userStateValidator;
 
-    public RegisterCallbackCommandProcessor(List<CallbackSubcommandProcessor> processors) {
+    public RegisterCallbackCommandProcessor(
+            List<CallbackSubcommandProcessor> processors,
+            UserStateValidator userStateValidator
+    ) {
+        this.userStateValidator = userStateValidator;
         Map<Subcommand, CallbackSubcommandProcessor> map = new HashMap<>();
         processors.stream()
                 .filter(processor -> processor.getCommand().equals(getCommand()))
@@ -27,6 +33,10 @@ public class RegisterCallbackCommandProcessor implements CallbackCommandProcesso
     }
 
     public void process(CallbackQuery callbackQuery, CallbackData callbackData) {
+        userStateValidator.validation(
+                callbackQuery.getMessage().getChatId(),
+                this
+        );
         subcommandProcessors
                 .get(
                         callbackData.subcommand().orElseThrow(() -> new IllegalArgumentException(

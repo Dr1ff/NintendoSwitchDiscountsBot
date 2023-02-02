@@ -20,11 +20,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 @RequiredArgsConstructor
 public class WishlistSelectKeyboardService implements WishlistKeyboardService {
 
-    private final static int NUMBER_OF_NAVIGATION_ROWS = 2;
-    private final static int NUMBER_OF_GAMES_BUTTONS = 8;
-    private final static int PAGINATION_ROW_INDEX = 8;
-    private final static int BUTTONS_IN_ROW = 1;
-    private final static int BACK_ROW_INDEX = 9;
+    private final static int NUM_NAV_ROWS = 3;
+    private final static int NUM_GAMES_BTNS = 5;
+    private final static int ADD_GAME_BTN_INDEX = 6;
+    private final static int PAGINATION_ROW_INDEX = 5;
+    private final static int BACK_ROW_INDEX = 7;
+    private final static int GAMES_BTNS_IN_ROW = 1;
 
 
     private final KeyboardRowAdjuster keyboardRowAdjuster;
@@ -37,9 +38,7 @@ public class WishlistSelectKeyboardService implements WishlistKeyboardService {
 
     @Override
     public InlineKeyboardMarkup getWishlistMarkup(CallbackData callbackData, List<Game> wishlist) {
-        var rows = keyboardHelper.getRows(
-                NUMBER_OF_GAMES_BUTTONS + NUMBER_OF_NAVIGATION_ROWS
-        );
+        var rows = keyboardHelper.getRows(NUM_GAMES_BTNS + NUM_NAV_ROWS);
         var games = wishlist.stream()
                 .map(game -> keyboardHelper.getButton(
                                 game.name(),
@@ -52,33 +51,36 @@ public class WishlistSelectKeyboardService implements WishlistKeyboardService {
                         )
                 )
                 .toList();
-        int firstButtonIndex = PaginationKeyboardUtil.firstButtonIndex(callbackData);
-        int nextKeyboardFirstButtonIndex =
-                PaginationKeyboardUtil.nextKeyboardFirstIndex(firstButtonIndex, NUMBER_OF_GAMES_BUTTONS);
         keyboardRowAdjuster.setPaginationButtons(
                 rows,
-                NUMBER_OF_GAMES_BUTTONS,
+                NUM_GAMES_BTNS,
                 wishlist.size(),
-                firstButtonIndex,
+                getCurrentFirstBtnIndex(callbackData),
                 PAGINATION_ROW_INDEX,
                 callbackData
         );
-        if (
-                PaginationKeyboardUtil.isLastPage(
-                        nextKeyboardFirstButtonIndex,
-                        NUMBER_OF_GAMES_BUTTONS
-                )
-        ) {
-            nextKeyboardFirstButtonIndex = wishlist.size();
-        }
         keyboardRowAdjuster.assembleRows(
                 rows,
                 games.subList(
-                                firstButtonIndex, nextKeyboardFirstButtonIndex
+                                getCurrentFirstBtnIndex(callbackData),
+                                getNextFirstBtnIndex(
+                                        getCurrentFirstBtnIndex(callbackData),
+                                        wishlist.size()
+                                )
                         )
                         .iterator(),
-                NUMBER_OF_GAMES_BUTTONS,
-                BUTTONS_IN_ROW
+                NUM_GAMES_BTNS,
+                GAMES_BTNS_IN_ROW
+        );
+        rows.get(ADD_GAME_BTN_INDEX).add(
+                keyboardHelper.getButton(
+                        new CallbackData(
+                                Command.G_ADD,
+                                Optional.of(Subcommand.G_ADD),
+                                Optional.empty(),
+                                Optional.empty()
+                        )
+                )
         );
         rows.get(BACK_ROW_INDEX).add(
                 keyboardHelper.getButton(
@@ -106,5 +108,23 @@ public class WishlistSelectKeyboardService implements WishlistKeyboardService {
     @Override
     public Set<Command> getCommands() {
         return Set.of(Command.WISHLIST);
+    }
+
+    private Integer getCurrentFirstBtnIndex(CallbackData callbackData) {
+        return PaginationKeyboardUtil.firstButtonIndex(callbackData);
+    }
+
+    private Integer getNextFirstBtnIndex(int firstBtnIndex, int wishlistSize) {
+        int nextFirstBtnIndex =
+                PaginationKeyboardUtil.nextKeyboardFirstIndex(firstBtnIndex, NUM_GAMES_BTNS);
+        if (
+                PaginationKeyboardUtil.isLastPage(
+                        nextFirstBtnIndex,
+                        NUM_GAMES_BTNS
+                )
+        ) {
+            nextFirstBtnIndex = wishlistSize;
+        }
+        return nextFirstBtnIndex;
     }
 }
