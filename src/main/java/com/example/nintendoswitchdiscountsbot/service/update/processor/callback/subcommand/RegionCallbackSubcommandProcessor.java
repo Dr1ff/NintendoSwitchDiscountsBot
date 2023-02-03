@@ -1,32 +1,30 @@
 package com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
-import com.example.nintendoswitchdiscountsbot.business.User;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
+import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.keyboard.KeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
-import com.example.nintendoswitchdiscountsbot.service.update.messenger.register.RegisterMessenger;
+import com.example.nintendoswitchdiscountsbot.service.update.messenger.region.RegionMessenger;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.country.CountrySubcommandArgs;
-import java.util.ArrayList;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 @Component
-public class RegisterCallbackSubcommandProcessor implements CallbackSubcommandProcessor {
+public class RegionCallbackSubcommandProcessor implements CallbackSubcommandProcessor {
 
     private final Map<Subcommand, KeyboardService> keyboardServices;
-    private final Map<Subcommand, RegisterMessenger> messengers;
+    private final Map<Subcommand, RegionMessenger> messengers;
     private final UserStorageService userStorageService;
 
-    public RegisterCallbackSubcommandProcessor(
+    public RegionCallbackSubcommandProcessor(
             List<KeyboardService> keyboardServices,
-            List<RegisterMessenger> messengers,
+            List<RegionMessenger> messengers,
             UserStorageService userStorageService
     ) {
         this.userStorageService = userStorageService;
@@ -52,26 +50,12 @@ public class RegisterCallbackSubcommandProcessor implements CallbackSubcommandPr
 
     @Override
     public void process(CallbackQuery callbackQuery, CallbackData callbackData) {
-        var subcommand = callbackData.subcommand().orElseThrow(
-                () -> new IllegalArgumentException(
-                        "В RegisterCallbackSubcommandProcessor попала callbackData " +
-                                "с subcommand = Optional.empty"
-                )
-        );
+        var subcommand = getSubcommand(callbackData);
         if (subcommand.equals(Subcommand.ACCEPT)) {
-            userStorageService.add(new User(
-                    callbackQuery.getFrom().getId(),
-                    new ArrayList<>(),
-                    ((CountrySubcommandArgs) callbackData.subcommandArgs()
-                            .orElseThrow(
-                                    () -> new IllegalArgumentException(
-                                            "В RegisterCallbackSubcommandProcessor попала callbackData " +
-                                                    "с subcommandArgs = Optional.empty"
-                                    )
-                            )
-                    ).country(),
-                    getCommand()
-            ));
+            userStorageService.setCountryToUser(
+                    getCountryFromArgs(callbackData),
+                    callbackQuery.getFrom().getId()
+            );
         }
         messengers
                 .get(subcommand)
@@ -82,6 +66,7 @@ public class RegisterCallbackSubcommandProcessor implements CallbackSubcommandPr
                                 .get(subcommand)
                                 .getMarkup(callbackData)
                 );
+
     }
 
     @Override
@@ -91,12 +76,33 @@ public class RegisterCallbackSubcommandProcessor implements CallbackSubcommandPr
                 Subcommand.NEXT,
                 Subcommand.CONFIRM,
                 Subcommand.CANCEL,
-                Subcommand.ACCEPT
+                Subcommand.ACCEPT,
+                Subcommand.REGION
         );
     }
 
     @Override
     public Command getCommand() {
-        return Command.REGISTER;
+        return Command.REGION;
+    }
+
+    private Subcommand getSubcommand(CallbackData callbackData) {
+        return callbackData.subcommand().orElseThrow(
+                () -> new IllegalArgumentException(
+                        "В RegisterCallbackSubcommandProcessor попала callbackData " +
+                                "с subcommand = Optional.empty"
+                )
+        );
+    }
+
+    private Country getCountryFromArgs(CallbackData callbackData) {
+        return ((CountrySubcommandArgs) callbackData.subcommandArgs()
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "В RegisterCallbackSubcommandProcessor попала callbackData " +
+                                        "с subcommandArgs = Optional.empty"
+                        )
+                ))
+                .country();
     }
 }

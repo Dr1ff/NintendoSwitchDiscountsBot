@@ -1,10 +1,10 @@
-package com.example.nintendoswitchdiscountsbot.service.update.reply.wishlist;
+package com.example.nintendoswitchdiscountsbot.service.update.messenger.wishlist;
 
 import com.example.nintendoswitchdiscountsbot.business.Game;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.observer.MessageEventPublisher;
-import com.example.nintendoswitchdiscountsbot.service.update.reply.Messenger;
+import com.example.nintendoswitchdiscountsbot.service.update.messenger.Messenger;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @Component
 @RequiredArgsConstructor
-public class WishlistMessenger implements Messenger { 
+public class WishlistMessenger implements Messenger {
 
     private final static String PARSE_MODE = "html";
 

@@ -45,7 +45,8 @@ public class ConfirmKeyboardService implements KeyboardService {
     @Override
     public Set<Command> getCommands() {
         return Set.of(
-                Command.REGISTER
+                Command.REGISTER,
+                Command.REGION
         );
     }
 

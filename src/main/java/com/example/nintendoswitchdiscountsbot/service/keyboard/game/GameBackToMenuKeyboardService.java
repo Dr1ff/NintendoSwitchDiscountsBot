@@ -44,7 +44,8 @@ public class GameBackToMenuKeyboardService implements GameKeyboardService {
     public Set<Subcommand> getSubcommands() {
         return Set.of(
                 Subcommand.CANCEL,
-                Subcommand.G_ADD
+                Subcommand.G_ADD,
+                Subcommand.BACK
         );
     }
 

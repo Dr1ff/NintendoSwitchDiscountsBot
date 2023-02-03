@@ -6,6 +6,7 @@ import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.data.CallbackDataMapper;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.message.MessageCommandProcessor;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.message.MessageNonCommandProcessor;
+import java.util.HashMap;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -39,9 +40,12 @@ public class UpdateHandler {
         this.commandProcessors = commandProcessors
                 .stream()
                 .collect(Collectors.toMap(MessageCommandProcessor::getCommand, Function.identity()));
-        this.nonCommandProcessors = nonCommandProcessors
-                .stream()
-                .collect(Collectors.toMap(MessageNonCommandProcessor::getState, Function.identity()));
+        this.nonCommandProcessors = new HashMap<>();
+        nonCommandProcessors.forEach(processor ->
+                processor.getState().forEach(
+                        state -> this.nonCommandProcessors.put(state, processor)
+                )
+        );
         this.commandsO = Arrays.stream(Command.values())
                 .collect(Collectors.toMap(Command::name, Optional::of));
         this.callbackDataMapper = callbackDataMapper;

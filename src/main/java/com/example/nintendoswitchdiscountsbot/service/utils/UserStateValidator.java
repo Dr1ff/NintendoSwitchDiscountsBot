@@ -4,6 +4,7 @@ import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.repository.RepositorySearchException;
 import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.command.CallbackCommandProcessor;
+import com.example.nintendoswitchdiscountsbot.service.update.processor.message.MessageCommandProcessor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +14,15 @@ public class UserStateValidator {
 
     private final UserStorageService userStorageService;
 
-    public void validation(Long chatId, CallbackCommandProcessor processor) {
-        if (!currentUserStateIsCorrect(chatId, processor.getCommand())) {
-            setUserState(chatId, processor.getCommand());
+    public void validation(Long chatId, CallbackCommandProcessor callbackCommandProcessor) {
+        if (currentUserStateIsIncorrect(chatId, callbackCommandProcessor.getCommand())) {
+            setUserState(chatId, callbackCommandProcessor.getCommand());
+        }
+    }
+
+    public void validation(Long chatId, MessageCommandProcessor messageCommandProcessor) {
+        if (currentUserStateIsIncorrect(chatId, messageCommandProcessor.getCommand())) {
+            setUserState(chatId, messageCommandProcessor.getCommand());
         }
     }
 
@@ -33,8 +40,8 @@ public class UserStateValidator {
         );
     }
 
-    private boolean currentUserStateIsCorrect(Long chatId, Command command) {
-        return userStorageService
+    private boolean currentUserStateIsIncorrect(Long chatId, Command command) {
+        return !userStorageService
                 .findById(chatId)
                 .orElseThrow(
                         () -> new RepositorySearchException(

@@ -1,4 +1,4 @@
-package com.example.nintendoswitchdiscountsbot.service.update.reply;
+package com.example.nintendoswitchdiscountsbot.service.update.messenger;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;

@@ -30,7 +30,10 @@ public class CountrySubcommandArgsCreator implements SubcommandArgsCreator {
 
     @Override
     public Set<Command> getCommands() {
-        return Set.of(Command.REGISTER);
+        return Set.of(
+                Command.REGISTER,
+                Command.REGION
+        );
     }
 
 }

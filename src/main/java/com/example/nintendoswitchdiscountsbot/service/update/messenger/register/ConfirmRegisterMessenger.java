@@ -1,4 +1,4 @@
-package com.example.nintendoswitchdiscountsbot.service.update.reply.register;
+package com.example.nintendoswitchdiscountsbot.service.update.messenger.register;
 
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
@@ -41,7 +41,7 @@ public class ConfirmRegisterMessenger extends RegisterMessenger {
         return Set.of(Subcommand.CONFIRM);
     }
 
-    public String getConfirmText(CallbackData callbackData) {
+    private String getConfirmText(CallbackData callbackData) {
         var country = (((CountrySubcommandArgs) callbackData.subcommandArgs().orElseThrow(
                 () -> new IllegalArgumentException(
                         "В ConfirmRegisterReply попала callbackData " +

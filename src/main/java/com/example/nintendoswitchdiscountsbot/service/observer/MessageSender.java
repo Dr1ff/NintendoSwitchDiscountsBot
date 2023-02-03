@@ -4,6 +4,7 @@ import com.example.nintendoswitchdiscountsbot.service.TelegramBot;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
@@ -33,5 +34,10 @@ public class MessageSender {
     @SneakyThrows
     public void send(DeleteMessage deleteMessage) {
         telegramBot.execute(deleteMessage);
+    }
+
+    @SneakyThrows
+    public void send(AnswerCallbackQuery answerCallbackQuery) {
+        telegramBot.execute(answerCallbackQuery);
     }
 }

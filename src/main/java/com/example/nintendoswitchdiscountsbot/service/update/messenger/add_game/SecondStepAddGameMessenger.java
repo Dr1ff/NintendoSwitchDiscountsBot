@@ -1,4 +1,4 @@
-package com.example.nintendoswitchdiscountsbot.service.update.reply.add_game;
+package com.example.nintendoswitchdiscountsbot.service.update.messenger.add_game;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.business.Game;

@@ -8,7 +8,7 @@ import com.example.nintendoswitchdiscountsbot.repository.RepositorySearchExcepti
 import com.example.nintendoswitchdiscountsbot.service.keyboard.wishlist.WishlistKeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.storage.GameStorageService;
 import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
-import com.example.nintendoswitchdiscountsbot.service.update.reply.wishlist.WishlistMessenger;
+import com.example.nintendoswitchdiscountsbot.service.update.messenger.wishlist.WishlistMessenger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

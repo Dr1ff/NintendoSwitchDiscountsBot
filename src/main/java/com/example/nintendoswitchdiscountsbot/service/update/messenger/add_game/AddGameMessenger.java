@@ -1,12 +1,12 @@
-package com.example.nintendoswitchdiscountsbot.service.update.reply.register;
+package com.example.nintendoswitchdiscountsbot.service.update.messenger.add_game;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
-import com.example.nintendoswitchdiscountsbot.service.update.reply.Messenger;
+import com.example.nintendoswitchdiscountsbot.service.update.messenger.Messenger;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
-public abstract class RegisterMessenger implements Messenger {
+public abstract class AddGameMessenger implements Messenger {
 
     public abstract void reply(
             CallbackQuery callbackQuery,
@@ -16,6 +16,6 @@ public abstract class RegisterMessenger implements Messenger {
 
     @Override
     public Command getCommand() {
-        return Command.REGISTER;
+        return Command.G_ADD;
     }
 }

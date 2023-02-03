@@ -3,15 +3,16 @@ package com.example.nintendoswitchdiscountsbot.service.update.processor.message.
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
-import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
 import com.example.nintendoswitchdiscountsbot.service.keyboard.game.GameKeyboardService;
+import com.example.nintendoswitchdiscountsbot.service.storage.UserStorageService;
+import com.example.nintendoswitchdiscountsbot.service.update.messenger.add_game.ResultsAddGameMessenger;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.message.MessageNonCommandProcessor;
-import com.example.nintendoswitchdiscountsbot.service.update.reply.add_game.ResultsAddGameMessenger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -77,7 +78,7 @@ public class MessageAddGameNonCommandProcessor implements MessageNonCommandProce
     }
 
     @Override
-    public Command getState() {
-        return Command.G_ADD;
+    public Set<Command> getState() {
+        return Set.of(Command.G_ADD);
     }
 }

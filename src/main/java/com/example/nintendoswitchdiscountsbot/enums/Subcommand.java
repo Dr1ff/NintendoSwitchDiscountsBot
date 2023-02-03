@@ -15,6 +15,7 @@ public enum Subcommand {
     ACCEPT("✅"),
     PREV("⬅️"),
     NEXT("➡️"),
+    CLEAN("☠️"),
     COMPLETE("✅"),
     BACK(":back:"),
 

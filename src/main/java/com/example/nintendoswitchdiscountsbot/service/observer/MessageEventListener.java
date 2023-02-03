@@ -3,6 +3,7 @@ package com.example.nintendoswitchdiscountsbot.service.observer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
@@ -32,5 +33,10 @@ public class MessageEventListener {
     @EventListener
     public void handle(DeleteMessage deleteMessage) {
         messageSender.send(deleteMessage);
+    }
+
+    @EventListener
+    public void handle(AnswerCallbackQuery answerCallbackQuery) {
+        messageSender.send(answerCallbackQuery);
     }
 }

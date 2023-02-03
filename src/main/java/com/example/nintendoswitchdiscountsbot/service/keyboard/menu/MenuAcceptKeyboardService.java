@@ -1,11 +1,11 @@
-package com.example.nintendoswitchdiscountsbot.service.keyboard.country;
+package com.example.nintendoswitchdiscountsbot.service.keyboard.menu;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
 import com.example.nintendoswitchdiscountsbot.service.keyboard.KeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.utils.KeyboardHelper;
-import com.vdurmont.emoji.EmojiManager;
+import com.vdurmont.emoji.EmojiParser;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -15,8 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 @Component
 @RequiredArgsConstructor
-public class AcceptKeyboardService implements KeyboardService {
-
+public class MenuAcceptKeyboardService implements KeyboardService {
     private final KeyboardHelper keyboardHelper;
 
     @Override
@@ -24,7 +23,7 @@ public class AcceptKeyboardService implements KeyboardService {
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(
                         List.of(keyboardHelper.getButton(
-                                "Пуск" + EmojiManager.getForAlias("rocket").getUnicode(),
+                                EmojiParser.parseToUnicode(":back: Назад в меню"),
                                         CallbackData.builder()
                                                 .command(Command.MENU)
                                                 .commandArgs(Optional.empty())
@@ -45,7 +44,7 @@ public class AcceptKeyboardService implements KeyboardService {
     @Override
     public Set<Command> getCommands() {
         return Set.of(
-                Command.REGISTER
+                Command.REGION
         );
     }
 }

@@ -4,14 +4,14 @@ import com.example.nintendoswitchdiscountsbot.business.Game;
 import com.example.nintendoswitchdiscountsbot.business.User;
 import com.example.nintendoswitchdiscountsbot.entity.GameEntity;
 import com.example.nintendoswitchdiscountsbot.entity.UserEntity;
+import com.example.nintendoswitchdiscountsbot.enums.Country;
 import com.example.nintendoswitchdiscountsbot.repository.UserRepository;
 import com.example.nintendoswitchdiscountsbot.service.utils.GameComparator;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -73,6 +73,21 @@ public class UserStorageService {
             games.sort(new GameComparator(request).reversed());
         });
         return games;
+    }
+
+    public void setCountryToUser(Country country, Long userId) {
+        repository.findById(userId).ifPresent(entity -> {
+            entity.setCountry(country);
+            entity.setWishlist(
+                    entity.getWishlist()
+                            .stream()
+                            .map(GameEntity.Id::getName)
+                            .map(name -> new GameEntity.Id(name, country))
+                            .filter(id -> gameStorageService.findById(id).isPresent())
+                            .toList()
+            );
+            repository.save(entity);
+        });
     }
 
     private User fromEntity(UserEntity entity) {

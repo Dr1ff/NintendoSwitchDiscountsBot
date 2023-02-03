@@ -7,8 +7,8 @@ import com.example.nintendoswitchdiscountsbot.repository.RepositorySearchExcepti
 import com.example.nintendoswitchdiscountsbot.service.storage.GameStorageService;
 import com.example.nintendoswitchdiscountsbot.service.keyboard.game.GameKeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.callback.subcommand.args.integer.IntegerSubcommandArgs;
-import com.example.nintendoswitchdiscountsbot.service.update.reply.add_game.AddGameMessenger;
-import com.example.nintendoswitchdiscountsbot.service.update.reply.add_game.ResultsAddGameMessenger;
+import com.example.nintendoswitchdiscountsbot.service.update.messenger.add_game.AddGameMessenger;
+import com.example.nintendoswitchdiscountsbot.service.update.messenger.add_game.ResultsAddGameMessenger;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -1,7 +1,7 @@
-package com.example.nintendoswitchdiscountsbot.service.update.reply.menu;
+package com.example.nintendoswitchdiscountsbot.service.update.messenger.menu;
 
 import com.example.nintendoswitchdiscountsbot.enums.Command;
-import com.example.nintendoswitchdiscountsbot.service.update.reply.Messenger;
+import com.example.nintendoswitchdiscountsbot.service.update.messenger.Messenger;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 

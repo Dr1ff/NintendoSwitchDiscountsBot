@@ -4,6 +4,7 @@ import com.example.nintendoswitchdiscountsbot.enums.Command;
 import com.example.nintendoswitchdiscountsbot.service.keyboard.country.CountryKeyboardService;
 import com.example.nintendoswitchdiscountsbot.service.observer.MessageEventPublisher;
 import com.example.nintendoswitchdiscountsbot.service.update.processor.message.MessageCommandProcessor;
+import com.example.nintendoswitchdiscountsbot.service.utils.UserStateValidator;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,11 @@ public class StartMessageCommandProcessor implements MessageCommandProcessor {
 
     private final CountryKeyboardService keyboardService;
     private final MessageEventPublisher messageEventPublisher;
+    private final UserStateValidator userStateValidator;
 
     @Override
     public void process(Message message) {
+        userStateValidator.validation(message.getChatId(), this);
         messageEventPublisher.publish(SendMessage.builder()
                 .text(getMessageText(message.getFrom().getFirstName()))
                 .replyMarkup(keyboardService.getFirstPageKeyboardMarkup())

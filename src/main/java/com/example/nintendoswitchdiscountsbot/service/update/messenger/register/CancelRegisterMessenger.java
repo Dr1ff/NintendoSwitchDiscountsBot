@@ -1,4 +1,4 @@
-package com.example.nintendoswitchdiscountsbot.service.update.reply.register;
+package com.example.nintendoswitchdiscountsbot.service.update.messenger.register;
 
 import com.example.nintendoswitchdiscountsbot.business.CallbackData;
 import com.example.nintendoswitchdiscountsbot.enums.Subcommand;
