@@ -23,20 +23,20 @@ public class CallbackParser {
             List<CommandArgsCreator> commandArgsCreators
     ) {
         this.subcommandArgsCreators = new HashMap<>();
-        subcommandArgsCreators.forEach(creator -> {
-            if (!this.subcommandArgsCreators.containsKey(creator.getCommand())) {
-                this.subcommandArgsCreators.put(creator.getCommand(), new HashMap<>());
+        subcommandArgsCreators.forEach(creator -> creator.getCommands().forEach(command -> {
+            if (!this.subcommandArgsCreators.containsKey(command)) {
+                this.subcommandArgsCreators.put(command, new HashMap<>());
             }
             creator.getSubcommands().forEach(subcommand ->
-                    this.subcommandArgsCreators.get(creator.getCommand()).put(subcommand, creator));
-        });
+                    this.subcommandArgsCreators.get(command).put(subcommand, creator));
+        }));
         this.commandArgsCreators = new HashMap<>();
         commandArgsCreators.forEach(creator -> creator.getCommands()
                 .forEach(command -> this.commandArgsCreators.put(command, creator))
         );
     }
 
-    public CallbackData fromDto(CallbackDto dto) {//todo: сделать что то с null
+    public CallbackData fromDto(CallbackDto dto) { //todo: сделать что то с null
         CommandArgs commandArgs;
         SubcommandArgs subcommandArgs;
         if (Objects.isNull(dto.commandArgs())) {

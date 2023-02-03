@@ -14,5 +14,5 @@ public interface SubcommandArgsCreator {
 
     Set<Subcommand> getSubcommands();
 
-    Command getCommand();
+    Set<Command> getCommands();
 }

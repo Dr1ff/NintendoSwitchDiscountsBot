@@ -1,9 +1,9 @@
 package com.example.nintendoswitchdiscountsbot.dto;
 
+import com.example.nintendoswitchdiscountsbot.enums.Country;
+
 import java.time.Instant;
 import java.util.Optional;
-
-import com.example.nintendoswitchdiscountsbot.enums.Country;
 
 /**
  * @author Alexander Popov

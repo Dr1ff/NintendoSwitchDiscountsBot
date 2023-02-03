@@ -13,7 +13,8 @@ CREATE TABLE game (
                       price_without_discount NUMERIC,
                       discount_percent FLOAT8,
                       price_valid_until TIMESTAMP,
-                      is_discount BOOLEAN NOT NULL
+                      is_discount BOOLEAN NOT NULL,
+                      hashcode INTEGER
 );
 
 CREATE TABLE notification (
@@ -26,6 +27,7 @@ CREATE TABLE notification (
 
 CREATE TABLE "user" (
                         id BIGINT PRIMARY KEY ,
-                        country VARCHAR(255),
-                        wishlist BIGINT
+                        country TEXT NOT NULL,
+                        state TEXT,
+                        wishlist JSONB
 );

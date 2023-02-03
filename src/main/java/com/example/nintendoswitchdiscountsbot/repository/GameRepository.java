@@ -1,10 +1,17 @@
 package com.example.nintendoswitchdiscountsbot.repository;
 
 import com.example.nintendoswitchdiscountsbot.entity.GameEntity;
+import com.example.nintendoswitchdiscountsbot.enums.Country;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface GameRepository extends JpaRepository<GameEntity, Long> {
+import java.util.List;
+import java.util.Optional;
 
+@Repository
+public interface GameRepository extends JpaRepository<GameEntity, GameEntity.Id> {
+
+    List<GameEntity> findById_NameContainsIgnoreCaseAndId_Country(String name, Country country);
+
+    Optional<GameEntity> findByHashcode(Integer hashcode);
 }

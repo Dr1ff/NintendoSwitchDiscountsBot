@@ -5,11 +5,24 @@ import lombok.Getter;
 
 @Getter
 public enum Subcommand {
-    PREV(":arrow_left:"),
-    NEXT(":arrow_right:"),
+
+    SHOW(""),
+    SELECT(""),
+    AFFIRM(""),
     CONFIRM(""),
-    ACCEPT(":white_check_mark:"),
-    CANCEL(":x:");
+
+    CANCEL("❌"),
+    ACCEPT("✅"),
+    PREV("⬅️"),
+    NEXT("➡️"),
+    CLEAN("☠️"),
+    COMPLETE("✅"),
+    BACK(":back:"),
+
+    WISHLIST(":joystick: Мои игры"),
+    G_ADD(":heavy_plus_sign: Добавить игру"),
+    REGION(":earth_americas: Изменить регион"),
+    NOTIFICATION(":mailbox_with_mail: Оповещения");
 
     private final String buttonText;
 

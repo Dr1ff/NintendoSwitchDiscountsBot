@@ -4,7 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum Command {
+    MENU,
     START,
+    BREAK,
+    G_ADD,
+    REGION,
     REGISTER,
-    BREAK
+    WISHLIST,
+    NOTIFICATION
 }

@@ -22,9 +22,9 @@ public class BotInitializer {
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         try {
             botsApi.registerBot(bot);
-        }
-        catch (TelegramApiException e) {
+        } catch (TelegramApiException e) {
             log.error("Error occurred: " + e.getMessage());
         }
     }
+
 }

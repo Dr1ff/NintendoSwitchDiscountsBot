@@ -1,23 +1,12 @@
 package com.example.nintendoswitchdiscountsbot.entity;
 
+import com.example.nintendoswitchdiscountsbot.enums.Country;
+import lombok.*;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-
-import com.example.nintendoswitchdiscountsbot.enums.Country;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Data
 @Entity
@@ -44,11 +33,15 @@ public class GameEntity {
     @Column(name = "is_discount", nullable = false)
     private boolean isDiscount;
 
+    @Column(name = "hashcode")
+    private Integer hashcode;
+
     @Getter
     @Embeddable
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Id implements Serializable {
+
         @Column(name = "name", nullable = false)
         private String name;
 
@@ -56,4 +49,5 @@ public class GameEntity {
         @Column(name = "country", nullable = false)
         private Country country;
     }
+
 }
